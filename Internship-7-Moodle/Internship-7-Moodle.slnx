@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="Moodle.Application/Moodle.Application.csproj" />
+    <Project Path="Moodle.Domain/Moodle.Domain.csproj" />
+    <Project Path="Moodle.Infrastructure/Moodle.Infrastructure.csproj" />
+    <Project Path="Moodle.Presentation/Moodle.Presentation.csproj" />
+  </Folder>
+</Solution>
