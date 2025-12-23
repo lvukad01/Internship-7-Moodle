@@ -6,7 +6,7 @@ namespace Moodle.Infrastructure.Persistence.Seed
     using Moodle.Domain.Entities;
     using Moodle.Domain.Enums;
 
-    public static class DataBaseSeed
+    public static class DatabaseSeed //seed za bazu, koristimo u moodledbcontext
     {
         public static void SeedData(ModelBuilder modelBuilder)
         {

@@ -6,7 +6,7 @@ using Moodle.Infrastructure.Persistence.Seed;
 
 namespace Moodle.Infrastructure.Persistence
 {
-    public class MoodleDbContext : DbContext //mapiranje entiteta na bazu podataka, sluzi u repository za linq upite
+    public class MoodleDbContext : DbContext //mapiranje entiteta na bazu podataka, postavljanje seed, sluzi u repository za linq upite
     {
         public DbSet<User> Users => Set<User>();
         public DbSet<Course> Courses => Set<Course>();
@@ -15,8 +15,6 @@ namespace Moodle.Infrastructure.Persistence
         public DbSet<Material> Materials => Set<Material>();
         public DbSet<Message> Messages => Set<Message>();
 
-        public MoodleDbContext(DbContextOptions<MoodleDbContext> options)
-            : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
