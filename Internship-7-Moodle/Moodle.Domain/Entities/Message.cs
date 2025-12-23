@@ -1,19 +1,19 @@
 ﻿
 
+using Moodle.Domain.Abstractions;
+
 namespace Moodle.Domain.Entities
 {
-    public class Message
+    public class Message: BaseEntity
     {
-        public int Id { get; private set; }
+        public int SenderId { get; set; }
+        public User Sender { get; set; } = null!;
 
-        public int SenderId { get; private set; }
-        public User Sender { get; private set; } = null!;
+        public int ReceiverId { get; set; }
+        public User Receiver { get; set; } = null!;
 
-        public int ReceiverId { get; private set; }
-        public User Receiver { get; private set; } = null!;
-
-        public string Content { get; private set; } = null!;
-        public DateTime SentAt { get; private set; }
+        public string Content { get; set; } = null!;
+        public DateTime SentAt { get; set; }
     }
 
 }

@@ -4,12 +4,12 @@ namespace Moodle.Domain.Entities
 {
     public class Enrollment
     {
-        public int UserId { get; private set; }
-        public User User { get; private set; } = null!;
+        public int UserId { get; set; }
+        public User User { get; set; } = null!;
 
-        public int CourseId { get; private set; }
-        public Course Course { get; private set; } = null!;
+        public int CourseId { get; set; }
+        public Course Course { get; set; } = null!;
 
-        public DateTime EnrolledAt { get; private set; }
+        public DateTime EnrolledAt { get; set; }
     }
 }

@@ -7,8 +7,7 @@ namespace Moodle.Domain.Persistence
     {
         Task<Course?> GetByIdAsync(int id);
         Task<List<Course>> GetAllAsync();
+        Task<List<Course>> GetByProfessorIdAsync(int professorId);
         Task AddAsync(Course course);
-        void Update(Course course);
-        Task DeleteAsync(Course course);
     }
 }
