@@ -11,7 +11,7 @@ namespace Moodle.Domain.Persistence // Definiramo metode koje cemo u infrastruct
         Task<List<User>> GetAllProfessorsAsync();
 
         Task AddAsync(User user);
-        void Update(User user);
+        Task Update(User user);
         Task DeleteAsync(User user);
     }
 }
