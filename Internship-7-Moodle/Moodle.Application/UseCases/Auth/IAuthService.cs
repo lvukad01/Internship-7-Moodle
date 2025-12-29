@@ -1,6 +1,4 @@
-﻿
-
-namespace Moodle.Application.Interfaces // Definiramo metode koje cemo implementirati u servisu za autentifikaciju
+﻿namespace Moodle.Application.UseCases.Auth // Definiramo metode koje cemo implementirati u servisu za autentifikaciju
 {
     public interface IAuthService
     {

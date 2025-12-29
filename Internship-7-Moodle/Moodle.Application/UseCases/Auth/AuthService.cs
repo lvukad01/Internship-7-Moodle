@@ -1,13 +1,12 @@
 ﻿using System.Text.RegularExpressions;
 using Moodle.Application.Exceptions;
-using Moodle.Application.Interfaces;
 using Moodle.Domain.Common.Validation;
 using Moodle.Domain.Common.Validation.ValidationItems;
 using Moodle.Domain.Entities;
 using Moodle.Domain.Enums;
 using Moodle.Domain.Persistence;
 
-namespace Moodle.Application.Services
+namespace Moodle.Application.UseCases.Auth
 {
     public class AuthService : IAuthService
     {
