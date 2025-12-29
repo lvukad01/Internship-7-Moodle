@@ -27,6 +27,12 @@ namespace Moodle.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
+        public async Task<bool> EmailExistsAsync(string email)
+        {
+            return await _context.Users
+                .AnyAsync(u => u.Email == email);
+        }
+
         public async Task<List<User>> GetAllProfessorsAsync()
         {
             return await _context.Users
@@ -51,6 +57,11 @@ namespace Moodle.Infrastructure.Repositories
         {
             return await _context.Users
                 .FirstOrDefaultAsync(u => u.Id == id);
+        }
+
+        public IQueryable<User> Query()
+        {
+            return _context.Users.AsQueryable();
         }
 
         public async Task UpdateAsync(User user)

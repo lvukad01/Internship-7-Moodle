@@ -6,9 +6,12 @@ namespace Moodle.Domain.Persistence // Definiramo metode koje cemo u infrastruct
     {
         Task<User?> GetByIdAsync(int id);
         Task<User?> GetByEmailAsync(string email);
+        Task<bool> EmailExistsAsync(string email);
 
         Task<List<User>> GetAllStudentsAsync();
         Task<List<User>> GetAllProfessorsAsync();
+
+        IQueryable<User> Query();
 
         Task AddAsync(User user);
         Task UpdateAsync(User user);

@@ -57,6 +57,27 @@ namespace Moodle.Domain.Common.Validation.ValidationItems
                 Severity = ValidationSeverity.Error,
                 Type = ValidationType.BusinessRule
             };
+            public static readonly ValidationItem PasswordsDoNotMatch = new ValidationItem
+            {
+                Code = $"{CodePrefix}6",
+                Message = "Lozinke se ne podudaraju.",
+                Severity = ValidationSeverity.Error,
+                Type = ValidationType.FormalValidation
+            };
+            public static readonly ValidationItem InvalidCredentials = new ValidationItem
+            {
+                Code = $"{CodePrefix}7",
+                Message = "Neispravan email ili lozinka.",
+                Severity = ValidationSeverity.Error,
+                Type = ValidationType.BusinessRule
+            };
+            public static readonly ValidationItem InvalidCaptcha = new ValidationItem
+            {
+                Code = $"{CodePrefix}8",
+                Message = "Captcha nije ispravna.",
+                Severity = ValidationSeverity.Error,
+                Type = ValidationType.FormalValidation
+            };
 
         }
 
