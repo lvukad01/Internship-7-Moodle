@@ -3,7 +3,7 @@
 using Microsoft.EntityFrameworkCore;
 using Moodle.Domain.Entities;
 using Moodle.Domain.Persistence;
-using Moodle.Infrastructure.Persistence;
+using Moodle.Infrastructure.Database;
 
 namespace Moodle.Infrastructure.Repositories
 {

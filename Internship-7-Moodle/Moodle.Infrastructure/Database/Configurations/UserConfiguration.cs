@@ -2,8 +2,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
-namespace Moodle.Infrastructure.Persistence.Configurations
+namespace Moodle.Infrastructure.Database.Configurations
 {
     public class UserConfiguration : IEntityTypeConfiguration<User> //mapiranje entiteta User na bazu podataka, kljucevi, ogranicenja
     {

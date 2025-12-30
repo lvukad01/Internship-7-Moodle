@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Moodle.Domain.Entities;
 
-namespace Moodle.Infrastructure.Persistence.Configurations
+namespace Moodle.Infrastructure.Database.Configurations
 {
     public class EnrollmentConfiguration : IEntityTypeConfiguration<Enrollment>
     {

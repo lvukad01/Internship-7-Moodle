@@ -1,10 +1,10 @@
-﻿
+﻿using Microsoft.EntityFrameworkCore;
+using Moodle.Domain.Entities;
+using Moodle.Domain.Enums;
 
-namespace Moodle.Infrastructure.Persistence.Seed
+namespace Moodle.Infrastructure.Database.Seed
 {
-    using Microsoft.EntityFrameworkCore;
-    using Moodle.Domain.Entities;
-    using Moodle.Domain.Enums;
+
 
     public static class DatabaseSeed //seed za bazu, koristimo u moodledbcontext
     {

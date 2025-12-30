@@ -2,9 +2,9 @@
 
 using Microsoft.EntityFrameworkCore;
 using Moodle.Domain.Entities;
-using Moodle.Infrastructure.Persistence.Seed;
+using Moodle.Infrastructure.Database.Seed;
 
-namespace Moodle.Infrastructure.Persistence
+namespace Moodle.Infrastructure.Database
 {
     public class MoodleDbContext : DbContext //mapiranje entiteta na bazu podataka, postavljanje seed, sluzi u repository za linq upite
     {
