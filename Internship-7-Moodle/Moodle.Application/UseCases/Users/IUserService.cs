@@ -1,5 +1,4 @@
-﻿using Moodle.Domain.Entities;
-using Moodle.Domain.Enums;
+﻿using Moodle.Domain.Enums;
 
 namespace Moodle.Application.UseCases.Users
 {

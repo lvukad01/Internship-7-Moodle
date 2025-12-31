@@ -1,0 +1,33 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Moodle.Application.UseCases.Auth;
+using Moodle.Application.UseCases.Users;
+using Moodle.Domain.Persistence;
+using Moodle.Infrastructure.Database;
+using Moodle.Infrastructure.Repositories;
+
+namespace Moodle.Infrastructure.DI
+{
+    public static class DependencyInjection
+    {
+        public static IServiceCollection AddInfrastructure(
+            this IServiceCollection services,
+            IConfiguration configuration)
+        {
+            // DbContext
+            services.AddDbContext<MoodleDbContext>(options =>
+                options.UseNpgsql(
+                    configuration.GetConnectionString("MoodleDbContext")));
+
+            // Repositories
+            services.AddScoped<IUserRepository, UserRepository>();
+
+            // Application services
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IUserService, UserService>();
+
+            return services;
+        }
+    }
+}

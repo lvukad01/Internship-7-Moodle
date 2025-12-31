@@ -199,25 +199,25 @@ namespace Moodle.Infrastructure.Migrations
                 schema: "public",
                 table: "Messages",
                 columns: new[] { "Id", "Content", "ReceiverId", "SenderId", "SentAt" },
-                values: new object[] { 1, "Dobrodošao!", 3, 2, new DateTime(2025, 12, 30, 15, 5, 54, 155, DateTimeKind.Utc).AddTicks(7041) });
+                values: new object[] { 1, "Dobrodošao!", 3, 2, new DateTime(2025, 12, 30, 19, 56, 13, 569, DateTimeKind.Utc).AddTicks(9955) });
 
             migrationBuilder.InsertData(
                 schema: "public",
                 table: "Announcements",
                 columns: new[] { "Id", "Content", "CourseId", "CreatedAt", "ProfessorId", "Title" },
-                values: new object[] { 1, "Dobrodošli na kolegij", 1, new DateTime(2025, 12, 30, 15, 5, 54, 155, DateTimeKind.Utc).AddTicks(6985), 2, "Dobrodošli" });
+                values: new object[] { 1, "Dobrodošli na kolegij", 1, new DateTime(2025, 12, 30, 19, 56, 13, 569, DateTimeKind.Utc).AddTicks(9899), 2, "Dobrodošli" });
 
             migrationBuilder.InsertData(
                 schema: "public",
                 table: "Enrollments",
                 columns: new[] { "CourseId", "UserId", "EnrolledAt" },
-                values: new object[] { 1, 3, new DateTime(2025, 12, 30, 15, 5, 54, 155, DateTimeKind.Utc).AddTicks(6955) });
+                values: new object[] { 1, 3, new DateTime(2025, 12, 30, 19, 56, 13, 569, DateTimeKind.Utc).AddTicks(9867) });
 
             migrationBuilder.InsertData(
                 schema: "public",
                 table: "Materials",
                 columns: new[] { "Id", "CourseId", "CreatedAt", "Name", "ProfessorId", "Url" },
-                values: new object[] { 1, 1, new DateTime(2025, 12, 30, 15, 5, 54, 155, DateTimeKind.Utc).AddTicks(7012), "Uvod u C#", 2, "https://example.com/csharp" });
+                values: new object[] { 1, 1, new DateTime(2025, 12, 30, 19, 56, 13, 569, DateTimeKind.Utc).AddTicks(9925), "Uvod u C#", 2, "https://example.com/csharp" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Announcements_CourseId",

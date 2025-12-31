@@ -62,7 +62,7 @@ namespace Moodle.Infrastructure.Migrations
                             Id = 1,
                             Content = "Dobrodošli na kolegij",
                             CourseId = 1,
-                            CreatedAt = new DateTime(2025, 12, 30, 15, 5, 54, 155, DateTimeKind.Utc).AddTicks(6985),
+                            CreatedAt = new DateTime(2025, 12, 30, 19, 56, 13, 569, DateTimeKind.Utc).AddTicks(9899),
                             ProfessorId = 2,
                             Title = "Dobrodošli"
                         });
@@ -121,7 +121,7 @@ namespace Moodle.Infrastructure.Migrations
                         {
                             UserId = 3,
                             CourseId = 1,
-                            EnrolledAt = new DateTime(2025, 12, 30, 15, 5, 54, 155, DateTimeKind.Utc).AddTicks(6955)
+                            EnrolledAt = new DateTime(2025, 12, 30, 19, 56, 13, 569, DateTimeKind.Utc).AddTicks(9867)
                         });
                 });
 
@@ -163,7 +163,7 @@ namespace Moodle.Infrastructure.Migrations
                         {
                             Id = 1,
                             CourseId = 1,
-                            CreatedAt = new DateTime(2025, 12, 30, 15, 5, 54, 155, DateTimeKind.Utc).AddTicks(7012),
+                            CreatedAt = new DateTime(2025, 12, 30, 19, 56, 13, 569, DateTimeKind.Utc).AddTicks(9925),
                             Name = "Uvod u C#",
                             ProfessorId = 2,
                             Url = "https://example.com/csharp"
@@ -206,7 +206,7 @@ namespace Moodle.Infrastructure.Migrations
                             Content = "Dobrodošao!",
                             ReceiverId = 3,
                             SenderId = 2,
-                            SentAt = new DateTime(2025, 12, 30, 15, 5, 54, 155, DateTimeKind.Utc).AddTicks(7041)
+                            SentAt = new DateTime(2025, 12, 30, 19, 56, 13, 569, DateTimeKind.Utc).AddTicks(9955)
                         });
                 });
 
