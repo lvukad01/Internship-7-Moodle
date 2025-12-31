@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moodle.Application.UseCases.Auth;
+using Moodle.Application.UseCases.Messages;
 using Moodle.Application.UseCases.Users;
 using Moodle.Domain.Persistence;
 using Moodle.Infrastructure.Database;
@@ -22,12 +23,17 @@ namespace Moodle.Infrastructure.DI
 
             // Repositories
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IMessageRepository, MessageRepository>();
 
             // Application services
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IMessageService, MessageService>();
+
+
 
             return services;
         }
     }
 }
+
