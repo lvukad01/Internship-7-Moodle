@@ -1,40 +1,30 @@
 ﻿using Moodle.Application.Exceptions;
 using Moodle.Application.UseCases.Users;
-using Moodle.Domain.Entities;
 using Moodle.Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 
 namespace Moodle.Presentation.Menus
 {
-    public class AdminMenu
+    public class UserManagementMenu
     {
         private readonly IUserService _userService;
-        private readonly User _loggedInUser;
 
-        public AdminMenu(IUserService userService, User loggedInUser)
+        public UserManagementMenu(IUserService userService)
         {
             _userService = userService;
-            _loggedInUser = loggedInUser;
         }
 
         public async Task StartAsync()
         {
-            if (_loggedInUser.Role != UserRole.Admin)
-            {
-                Console.WriteLine("Nemate ovlasti za pristup ovom meniju.");
-                return;
-            }
+
 
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine("=== Admin Menu ===");
+                Console.WriteLine("=== User management ===");
                 Console.WriteLine("1. Upravljanje studentima");
                 Console.WriteLine("2. Upravljanje profesorima");
-                Console.WriteLine("0. Odjava / Nazad");
+                Console.WriteLine("0. Nazad");
                 Console.Write("Odabir: ");
 
                 var choice = Console.ReadLine();
