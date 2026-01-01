@@ -70,9 +70,10 @@ namespace Moodle.Application.UseCases.Courses
             course.Announcements.Add(new Announcement
             {
                 CourseId = courseId,
+                ProfessorId = course.ProfessorId,  
                 Title = title,
                 Content = content,
-                CreatedAt = DateTime.Now
+                CreatedAt = DateTime.UtcNow
             });
 
             await _courseRepository.SaveChangesAsync();
@@ -92,7 +93,8 @@ namespace Moodle.Application.UseCases.Courses
                 CourseId = courseId,
                 Name = name,
                 Url = url,
-                CreatedAt = DateTime.Now
+                ProfessorId = course.ProfessorId,
+                CreatedAt = DateTime.UtcNow
             });
 
             await _courseRepository.SaveChangesAsync();
