@@ -18,13 +18,7 @@ namespace Moodle.Domain.Common.Validation.ValidationItems
             };
 
 
-            //public static readonly ValidationItem InvalidWebsiteUrl = new ValidationItem
-            //{
-            //    Code = $"{CodePrefix}8",
-            //    Message = "Pogrešan URL web stranice.",
-            //    Severity = ValidationSeverity.Warning,
-            //    Type = ValidationType.FormalValidation
-            //};
+
 
 
             public static readonly ValidationItem EmailValid = new ValidationItem
