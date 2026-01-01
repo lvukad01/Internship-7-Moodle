@@ -26,12 +26,6 @@ namespace Moodle.Infrastructure.Repositories
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
 
-        public async Task<List<Course>> GetAllAsync()
-        {
-            return await _context.Courses
-                .Include(c => c.Professor)
-                .ToListAsync();
-        }
 
         public async Task<List<Course>> GetByProfessorIdAsync(int professorId)
         {
@@ -46,5 +40,18 @@ namespace Moodle.Infrastructure.Repositories
             await _context.Courses.AddAsync(course);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<List<Course>> GetByStudentIdAsync(int studentId)
+        {
+            return await _context.Courses
+                .Where(c => c.Enrollments.Any(e => e.UserId == studentId))
+                .Include(c => c.Professor)
+                .Include(c => c.Enrollments)
+                .ThenInclude(e => e.User)
+                .Include(c => c.Announcements)
+                .Include(c => c.Materials)
+                .ToListAsync();
+        }
+
     }
 }
