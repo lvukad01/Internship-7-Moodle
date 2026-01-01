@@ -12,11 +12,13 @@ namespace Moodle.Presentation.Menus
         private readonly IUserService _userService;
         private readonly IMessageService _messageService;
         private readonly ICourseService _courseService;
-        public AuthMenu(IAuthService authService, IUserService userService, IMessageService messageService)
+
+        public AuthMenu(IAuthService authService, IUserService userService, IMessageService messageService, ICourseService courseService)
         {
             _authService = authService;
             _userService = userService;
             _messageService = messageService;
+            _courseService = courseService;
         }
 
         public async Task StartAsync()
@@ -26,7 +28,7 @@ namespace Moodle.Presentation.Menus
                 Console.Clear();
                 Console.WriteLine("=== Moodle ===");
                 Console.WriteLine("1. Login");
-                Console.WriteLine("2. Register");
+                Console.WriteLine("2. Registracija");
                 Console.WriteLine("0. Exit");
                 Console.Write("Odabir: ");
                 var choice = Console.ReadLine();
@@ -61,29 +63,24 @@ namespace Moodle.Presentation.Menus
             try
             {
                 var user = await _authService.LoginAsync(email, password);
-                var loggedInUser = await _authService.LoginAsync(email, password);
-                Console.WriteLine($"Uspješno prijavljeni: {loggedInUser.Email} ({loggedInUser.Role})\nPritisnite tipku za nastavak");
+                Console.WriteLine($"Uspješno prijavljeni: {user.Email} ({user.Role})");
                 Console.ReadKey();
 
-                // Prosljeđujemo ulogiranog korisnika u MainMenu
                 var mainMenu = new MainMenu(_userService, _messageService, _courseService, user);
                 await mainMenu.StartAsync();
-
             }
             catch (ValidationException ex)
             {
                 Console.WriteLine("Login neuspješan:");
                 foreach (var err in ex.Errors)
-                {
                     Console.WriteLine("- " + err.Message);
-                }
-            }
 
-            Console.WriteLine("Pritisnite bilo koju tipku za nastavak...");
-            Console.ReadKey();
+                Console.WriteLine("Pritisnite tipku za nastavak...");
+                Console.ReadKey();
+            }
         }
 
-        public async Task RegisterAsync()
+        private async Task RegisterAsync()
         {
             Console.Clear();
             Console.WriteLine("=== Registracija ===");
@@ -94,7 +91,6 @@ namespace Moodle.Presentation.Menus
             Console.Write("Potvrda lozinke: ");
             var confirmPassword = Console.ReadLine();
 
-            // Generiranje jednostavnog captcha koda
             var captcha = Guid.NewGuid().ToString("N").Substring(0, 6).ToUpper();
             Console.WriteLine($"Captcha: {captcha}");
             Console.Write("Unesite captcha: ");
@@ -109,12 +105,10 @@ namespace Moodle.Presentation.Menus
             {
                 Console.WriteLine("Registracija neuspješna:");
                 foreach (var err in ex.Errors)
-                {
                     Console.WriteLine("- " + err.Message);
-                }
             }
 
-            Console.WriteLine("Pritisnite bilo koju tipku za nastavak...");
+            Console.WriteLine("Pritisnite tipku za nastavak...");
             Console.ReadKey();
         }
     }

@@ -17,7 +17,7 @@ namespace Moodle.Infrastructure.Repositories
         public async Task<Course?> GetByIdAsync(int id)
         {
             return await _context.Courses
-                .Include(c => c.Professor) // dodano da ne bude null
+                .Include(c => c.Professor) // ovo je ključno
                 .Include(c => c.Enrollments)
                     .ThenInclude(e => e.User)
                 .Include(c => c.Announcements)
@@ -29,7 +29,7 @@ namespace Moodle.Infrastructure.Repositories
         {
             return await _context.Courses
                 .Where(c => c.ProfessorId == professorId)
-                .Include(c => c.Professor) // dodano
+                .Include(c => c.Professor)
                 .Include(c => c.Enrollments)
                     .ThenInclude(e => e.User)
                 .Include(c => c.Announcements)
@@ -41,13 +41,14 @@ namespace Moodle.Infrastructure.Repositories
         {
             return await _context.Courses
                 .Where(c => c.Enrollments.Any(e => e.UserId == studentId))
-                .Include(c => c.Professor) // osigurano da profesor nije null
+                .Include(c => c.Professor) // << ovo je ključno
                 .Include(c => c.Enrollments)
                     .ThenInclude(e => e.User)
                 .Include(c => c.Announcements)
                 .Include(c => c.Materials)
                 .ToListAsync();
         }
+
 
         public async Task AddAsync(Course course)
         {

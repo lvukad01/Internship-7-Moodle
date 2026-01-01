@@ -22,17 +22,20 @@ namespace Moodle.Application.UseCases.Courses
             var course = await _courseRepository.GetByIdAsync(courseId);
             if (course == null)
                 throw new ValidationException(new[] { ValidationItems.Course.CourseNotFound });
+
             return course;
         }
 
         public async Task<List<Course>> GetByProfessorIdAsync(int professorId)
         {
-            return await _courseRepository.GetByProfessorIdAsync(professorId);
+            var courses = await _courseRepository.GetByProfessorIdAsync(professorId);
+            return courses ?? new List<Course>();
         }
 
         public async Task<List<Course>> GetByStudentIdAsync(int studentId)
         {
-            return await _courseRepository.GetByStudentIdAsync(studentId);
+            var courses = await _courseRepository.GetByStudentIdAsync(studentId);
+            return courses ?? new List<Course>();
         }
 
         public async Task EnrollStudentAsync(int courseId, int studentId)
@@ -50,6 +53,7 @@ namespace Moodle.Application.UseCases.Courses
                     CourseId = courseId,
                     UserId = studentId
                 });
+
                 await _courseRepository.SaveChangesAsync();
             }
         }
@@ -63,7 +67,6 @@ namespace Moodle.Application.UseCases.Courses
                 throw new ValidationException(new[] { ValidationItems.Announcement.ContentRequired });
 
             var course = await GetByIdAsync(courseId);
-
             course.Announcements.Add(new Announcement
             {
                 CourseId = courseId,
@@ -84,7 +87,6 @@ namespace Moodle.Application.UseCases.Courses
                 throw new ValidationException(new[] { ValidationItems.Material.UrlRequired });
 
             var course = await GetByIdAsync(courseId);
-
             course.Materials.Add(new Material
             {
                 CourseId = courseId,
