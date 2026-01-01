@@ -42,6 +42,7 @@ namespace Moodle.Presentation.Menus
                         await RegisterAsync();
                         break;
                     case "0":
+                        Console.WriteLine("Izlaz iz aplikacije. Doviđenja!");
                         return;
                     default:
                         Console.WriteLine("Nepoznata opcija.");

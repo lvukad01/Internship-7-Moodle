@@ -46,8 +46,7 @@ namespace Moodle.Presentation.Menus
                 Console.Write("Odabir: ");
                 var choice = Console.ReadLine();
 
-                if (choice == "0")
-                    return;
+
 
                 if (!int.TryParse(choice, out int choiceInt))
                 {
@@ -101,9 +100,10 @@ namespace Moodle.Presentation.Menus
                     }
                 }
 
-                if (choiceInt == currentOption)
+                if (choiceInt == 0)
                 {
                     Console.WriteLine("Odjava...");
+                    Console.ReadKey();
                     break;
                 }
 
