@@ -1,6 +1,4 @@
-﻿
-
-namespace Moodle.Domain.Common.Validation.ValidationItems
+﻿namespace Moodle.Domain.Common.Validation.ValidationItems
 {
     public static partial class ValidationItems
     {
@@ -16,10 +14,6 @@ namespace Moodle.Domain.Common.Validation.ValidationItems
                 Severity = ValidationSeverity.Error,
                 Type = ValidationType.FormalValidation
             };
-
-
-
-
 
             public static readonly ValidationItem EmailValid = new ValidationItem
             {

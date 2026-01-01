@@ -25,7 +25,6 @@ namespace Moodle.Presentation.Menus
                 Console.Clear();
                 Console.WriteLine("=== Upravljanje kolegijima ===");
 
-                // Dohvati kolegije profesora
                 var courses = await _courseService.GetByProfessorIdAsync(_currentUser.Id);
 
                 if (courses == null || !courses.Any())
@@ -36,7 +35,6 @@ namespace Moodle.Presentation.Menus
                     return;
                 }
 
-                // Ispiši kolegije
                 for (int i = 0; i < courses.Count; i++)
                 {
                     Console.WriteLine($"{i + 1}. {courses[i].Name}");

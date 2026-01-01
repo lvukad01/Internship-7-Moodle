@@ -1,6 +1,4 @@
-﻿
-
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Moodle.Domain.Enums;
 using Moodle.Domain.Persistence;
 using Moodle.Infrastructure.Database;

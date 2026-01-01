@@ -1,9 +1,7 @@
 ﻿using Moodle.Application.Exceptions;
-using Moodle.Domain.Common.Validation;
 using Moodle.Domain.Common.Validation.ValidationItems;
 using Moodle.Domain.Entities;
 using Moodle.Domain.Persistence;
-using System.Text.RegularExpressions;
 
 namespace Moodle.Application.UseCases.Messages
 {
@@ -19,22 +17,12 @@ namespace Moodle.Application.UseCases.Messages
         public async Task SendMessageAsync(int senderId, int receiverId, string content)
         {
             if (string.IsNullOrWhiteSpace(content))
-                throw new ValidationException(new ValidationItem
-                {
-                    Code = "Message1",
-                    Message = "Poruka ne može biti prazna.",
-                    Severity = ValidationSeverity.Error,
-                    Type = ValidationType.BusinessRule
-                });
+                throw new ValidationException(new[] { ValidationItems.Message.ContentRequired });
+
 
             if (content.Length > 1000)
-                throw new ValidationException(new ValidationItem
-                {
-                    Code = "Message2",
-                    Message = "Poruka ne može biti duža od 1000 znakova.",
-                    Severity = ValidationSeverity.Error,
-                    Type = ValidationType.BusinessRule
-                });
+                throw new ValidationException(new[] { ValidationItems.Message.ContentTooLong });
+
 
             var message = new Message
             {

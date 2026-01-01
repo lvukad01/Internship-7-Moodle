@@ -1,7 +1,7 @@
 ﻿using Moodle.Application.Exceptions;
 using Moodle.Application.UseCases.Users;
+using Moodle.Domain.Entities;
 using Moodle.Domain.Enums;
-
 
 namespace Moodle.Presentation.Menus
 {
@@ -16,8 +16,6 @@ namespace Moodle.Presentation.Menus
 
         public async Task StartAsync()
         {
-
-
             while (true)
             {
                 Console.Clear();
@@ -48,26 +46,30 @@ namespace Moodle.Presentation.Menus
 
         private async Task ManageUsersAsync(UserRole role)
         {
-            var users = await _userService.GetUsersByRoleAsync(role);
-            if (!users.Any())
-            {
-                Console.WriteLine($"Nema korisnika s rolom {role}.");
-                Console.ReadKey();
-                return;
-            }
-
             while (true)
             {
+                var users = await _userService.GetUsersByRoleAsync(role);
+
                 Console.Clear();
                 Console.WriteLine($"=== Upravljanje {role} ===");
+
+                if (!users.Any())
+                {
+                    Console.WriteLine($"Nema korisnika s rolom {role}.");
+                    Console.ReadKey();
+                    return;
+                }
+
                 for (int i = 0; i < users.Count; i++)
                 {
                     Console.WriteLine($"{i + 1}. {users[i].Email} (ID: {users[i].Id})");
                 }
+
                 Console.WriteLine("0. Nazad");
                 Console.Write("Odaberite korisnika: ");
 
-                if (!int.TryParse(Console.ReadLine(), out int selected) || selected < 0 || selected > users.Count)
+                if (!int.TryParse(Console.ReadLine(), out int selected) ||
+                    selected < 0 || selected > users.Count)
                 {
                     Console.WriteLine("Neispravan unos.");
                     Console.ReadKey();
@@ -79,6 +81,7 @@ namespace Moodle.Presentation.Menus
 
                 var user = users[selected - 1];
                 await UserActionMenuAsync(user);
+                // ⬅️ nakon povratka se lista ponovo učita
             }
         }
 
@@ -99,13 +102,13 @@ namespace Moodle.Presentation.Menus
                 {
                     case "1":
                         await DeleteUserAsync(user);
-                        return; // nakon brisanja vraća na listu korisnika
+                        return; // ⬅️ izlaz → refresh liste
                     case "2":
                         await ChangeEmailAsync(user);
                         break;
                     case "3":
                         await ChangeRoleAsync(user);
-                        return; // vraća na listu korisnika jer se rola promijenila
+                        return; // ⬅️ izlaz → refresh liste
                     case "0":
                         return;
                     default:
@@ -118,6 +121,16 @@ namespace Moodle.Presentation.Menus
 
         private async Task DeleteUserAsync(User user)
         {
+            Console.Write($"Jeste li sigurni da želite obrisati korisnika {user.Email}? (y/n): ");
+            var confirm = Console.ReadLine();
+
+            if (confirm?.Trim().ToLower() != "y")
+            {
+                Console.WriteLine("Brisanje otkazano.");
+                Console.ReadKey();
+                return;
+            }
+
             try
             {
                 await _userService.DeleteUserAsync(user.Id);
@@ -129,6 +142,7 @@ namespace Moodle.Presentation.Menus
                 foreach (var err in ex.Errors)
                     Console.WriteLine("- " + err.Message);
             }
+
             Console.ReadKey();
         }
 
@@ -148,30 +162,41 @@ namespace Moodle.Presentation.Menus
                 foreach (var err in ex.Errors)
                     Console.WriteLine("- " + err.Message);
             }
+
             Console.ReadKey();
         }
 
         private async Task ChangeRoleAsync(User user)
         {
             Console.WriteLine($"Trenutna rola: {user.Role}");
-            UserRole newRole = user.Role == UserRole.Student ? UserRole.Professor : UserRole.Student;
-            Console.WriteLine($"Želite li promijeniti rolu u {newRole}? (y/n): ");
+
+            UserRole newRole = user.Role == UserRole.Student
+                ? UserRole.Professor
+                : UserRole.Student;
+
+            Console.Write($"Jeste li sigurni da želite promijeniti rolu u {newRole}? (y/n): ");
             var input = Console.ReadLine();
-            if (input?.Trim().ToLower() == "y")
-            {
-                try
-                {
-                    await _userService.ChangeRoleAsync(user.Id, newRole);
-                    Console.WriteLine("Rola promijenjena.");
-                }
-                catch (ValidationException ex)
-                {
-                    Console.WriteLine("Promjena role neuspješna:");
-                    foreach (var err in ex.Errors)
-                        Console.WriteLine("- " + err.Message);
-                }
+
+            if (input?.Trim().ToLower() != "y")
+            { 
+                Console.WriteLine("Promjena role otkazana.");
                 Console.ReadKey();
+                return;
             }
+
+            try
+            {
+                await _userService.ChangeRoleAsync(user.Id, newRole);
+                Console.WriteLine("Rola promijenjena.");
+            }
+            catch (ValidationException ex)
+            {
+                Console.WriteLine("Promjena role neuspješna:");
+                foreach (var err in ex.Errors)
+                    Console.WriteLine("- " + err.Message);
+            }
+
+            Console.ReadKey();
         }
     }
 }

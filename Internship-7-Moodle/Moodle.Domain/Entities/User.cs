@@ -1,5 +1,4 @@
-﻿
-using Moodle.Domain.Abstractions;
+﻿using Moodle.Domain.Abstractions;
 using Moodle.Domain.Entities;
 using Moodle.Domain.Enums;
 

@@ -1,5 +1,4 @@
-﻿
-namespace Moodle.Domain.Common.Validation
+﻿namespace Moodle.Domain.Common.Validation
 {
     public class ValidationResult
     {

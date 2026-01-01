@@ -1,6 +1,4 @@
-﻿
-
-namespace Moodle.Domain.Enums
+﻿namespace Moodle.Domain.Enums
 {
     public enum UserRole
     {

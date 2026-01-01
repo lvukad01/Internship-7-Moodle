@@ -12,7 +12,6 @@ var services = new ServiceCollection();
 
 services.AddInfrastructure(configuration);
 
-// Menus ostaju u Presentation
 services.AddScoped<AuthMenu>();
 services.AddScoped<MainMenu>();
 services.AddScoped<ChatMenu>();

@@ -58,7 +58,6 @@ namespace Moodle.Presentation.Menus
 
                 int currentOption = 1;
 
-                // Privatni chat - svi
                 if (choiceInt == currentOption++)
                 {
                     var chatMenu = new ChatMenu(_messageService, _userService, _currentUser.Id);
@@ -66,7 +65,6 @@ namespace Moodle.Presentation.Menus
                     continue;
                 }
 
-                // Student opcija - Moji kolegiji
                 if (_currentUser.Role == UserRole.Student)
                 {
                     if (choiceInt == currentOption++)
@@ -77,7 +75,6 @@ namespace Moodle.Presentation.Menus
                     }
                 }
 
-                // Professor opcije
                 if (_currentUser.Role == UserRole.Professor)
                 {
                     if (choiceInt == currentOption++)
@@ -94,7 +91,6 @@ namespace Moodle.Presentation.Menus
                     }
                 }
 
-                // Admin opcija - User Management
                 if (_currentUser.Role == UserRole.Admin)
                 {
                     if (choiceInt == currentOption++)
@@ -105,7 +101,6 @@ namespace Moodle.Presentation.Menus
                     }
                 }
 
-                // Odjava
                 if (choiceInt == currentOption)
                 {
                     Console.WriteLine("Odjava...");

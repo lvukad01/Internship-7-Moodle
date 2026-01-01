@@ -2,7 +2,6 @@
 using Moodle.Application.Exceptions;
 using Moodle.Domain.Common.Validation;
 using Moodle.Domain.Common.Validation.ValidationItems;
-using Moodle.Domain.Entities;
 using Moodle.Domain.Enums;
 using Moodle.Domain.Persistence;
 
@@ -29,7 +28,6 @@ namespace Moodle.Application.UseCases.Auth
 
             if (user == null || user.Password != password)
             {
-                await Task.Delay(30_000); // anti-bot, usporavaanje brute-force napada
                 throw new ValidationException(ValidationItems.User.InvalidCredentials);
             }
 

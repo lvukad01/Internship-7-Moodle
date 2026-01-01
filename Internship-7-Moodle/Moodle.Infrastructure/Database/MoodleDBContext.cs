@@ -1,6 +1,4 @@
-﻿
-
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Moodle.Domain.Entities;
 using Moodle.Infrastructure.Database.Seed;
 

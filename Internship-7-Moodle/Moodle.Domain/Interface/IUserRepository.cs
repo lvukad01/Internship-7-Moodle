@@ -1,6 +1,4 @@
-﻿
-
-namespace Moodle.Domain.Persistence // Definiramo metode koje cemo u infrastructure koristiti za implementaciju repozitorija
+﻿namespace Moodle.Domain.Persistence // Definiramo metode koje cemo u infrastructure koristiti za implementaciju repozitorija
 {
     public interface IUserRepository
     {

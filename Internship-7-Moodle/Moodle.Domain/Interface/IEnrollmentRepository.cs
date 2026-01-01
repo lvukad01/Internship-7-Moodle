@@ -1,5 +1,4 @@
-﻿
-using Moodle.Domain.Entities;
+﻿using Moodle.Domain.Entities;
 
 namespace Moodle.Domain.Persistence
 {

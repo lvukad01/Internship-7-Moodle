@@ -1,5 +1,4 @@
 ﻿using Moodle.Application.Exceptions;
-using Moodle.Domain.Common.Validation;
 using Moodle.Domain.Common.Validation.ValidationItems;
 using Moodle.Domain.Entities;
 using Moodle.Domain.Persistence;

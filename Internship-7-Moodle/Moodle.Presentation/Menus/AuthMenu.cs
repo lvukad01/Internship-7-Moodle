@@ -63,6 +63,7 @@ namespace Moodle.Presentation.Menus
             try
             {
                 var user = await _authService.LoginAsync(email, password);
+
                 Console.WriteLine($"Uspješno prijavljeni: {user.Email} ({user.Role})");
                 Console.ReadKey();
 

@@ -1,6 +1,4 @@
-﻿
-
-using Moodle.Domain.Abstractions;
+﻿using Moodle.Domain.Abstractions;
 
 namespace Moodle.Domain.Entities
 {

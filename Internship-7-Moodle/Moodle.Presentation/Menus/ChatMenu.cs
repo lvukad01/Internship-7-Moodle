@@ -1,6 +1,5 @@
 ﻿using Moodle.Application.UseCases.Messages;
 using Moodle.Application.UseCases.Users;
-using Moodle.Domain.Entities;
 using Moodle.Domain.Enums;
 using Moodle.Application.Exceptions;
 
@@ -54,10 +53,8 @@ namespace Moodle.Presentation.Menus
             Console.Clear();
             Console.WriteLine("=== Nova poruka ===");
 
-            // Prikaz svih korisnika osim trenutnog
             var allUsers = await _userService.GetUsersByRoleAsync(UserRole.Student);
             allUsers.AddRange(await _userService.GetUsersByRoleAsync(UserRole.Professor));
-            // Admini mogu slati poruke samo ako ih ima više
             allUsers.RemoveAll(u => u.Id == _currentUserId);
 
             if (!allUsers.Any())

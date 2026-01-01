@@ -1,6 +1,4 @@
-﻿
-
-namespace Moodle.Domain.Entities
+﻿namespace Moodle.Domain.Entities
 {
     public class Enrollment
     {

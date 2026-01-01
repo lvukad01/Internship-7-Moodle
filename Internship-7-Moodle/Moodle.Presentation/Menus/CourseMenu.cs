@@ -1,5 +1,4 @@
-﻿using Moodle.Application.Exceptions;
-using Moodle.Application.UseCases.Courses;
+﻿using Moodle.Application.UseCases.Courses;
 using Moodle.Application.UseCases.Users;
 using Moodle.Domain.Entities;
 using Moodle.Domain.Enums;
