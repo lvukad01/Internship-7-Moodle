@@ -11,5 +11,7 @@ namespace Moodle.Application.UseCases.Users
         Task ChangeRoleAsync(int userId, UserRole newRole);
 
         Task DeleteUserAsync(int userId);
+        Task<List<User>> GetAllStudentsAsync();
+        Task<List<User>> GetAllProfessorsAsync();
     }
 }

@@ -72,5 +72,16 @@ namespace Moodle.Application.UseCases.Users
 
             await _userRepository.DeleteAsync(user);
         }
+
+        public async Task<List<User>> GetAllStudentsAsync()
+        {
+            return await _userRepository.GetAllStudentsAsync();
+        }
+
+        public async Task<List<User>> GetAllProfessorsAsync()
+        {
+            return await _userRepository.GetAllProfessorsAsync();
+        }
+
     }
 }

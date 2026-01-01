@@ -1,6 +1,6 @@
-﻿using Moodle.Application.UseCases.Courses;
+﻿using Moodle.Application.UseCases.Users;
 using Moodle.Application.UseCases.Messages;
-using Moodle.Application.UseCases.Users;
+using Moodle.Application.UseCases.Courses;
 using Moodle.Domain.Enums;
 
 namespace Moodle.Presentation.Menus
@@ -46,17 +46,19 @@ namespace Moodle.Presentation.Menus
                 Console.Write("Odabir: ");
                 var choice = Console.ReadLine();
 
-                if (choice == "0") return;
+                if (choice == "0")
+                    return;
+
                 if (!int.TryParse(choice, out int choiceInt))
                 {
-                    Console.WriteLine("Nepoznata opcija.");
+                    Console.WriteLine("Nepoznata opcija. Pritisnite tipku za nastavak...");
                     Console.ReadKey();
                     continue;
                 }
 
                 int currentOption = 1;
 
-                // Privatni chat
+                // Privatni chat - svi
                 if (choiceInt == currentOption++)
                 {
                     var chatMenu = new ChatMenu(_messageService, _userService, _currentUser.Id);
@@ -64,15 +66,18 @@ namespace Moodle.Presentation.Menus
                     continue;
                 }
 
-                // Student: Moji kolegiji
-                if (_currentUser.Role == UserRole.Student && choiceInt == currentOption++)
+                // Student opcija - Moji kolegiji
+                if (_currentUser.Role == UserRole.Student)
                 {
-                    var courseMenu = new CourseMenu(_courseService, _userService, _currentUser);
-                    await courseMenu.StartAsync();
-                    continue;
+                    if (choiceInt == currentOption++)
+                    {
+                        var courseMenu = new CourseMenu(_courseService, _userService, _currentUser);
+                        await courseMenu.StartAsync();
+                        continue;
+                    }
                 }
 
-                // Professor: Moji kolegiji
+                // Professor opcije
                 if (_currentUser.Role == UserRole.Professor)
                 {
                     if (choiceInt == currentOption++)
@@ -81,24 +86,33 @@ namespace Moodle.Presentation.Menus
                         await courseMenu.StartAsync();
                         continue;
                     }
-                    // Upravljanje kolegijima
                     if (choiceInt == currentOption++)
                     {
-                        var courseMenu = new CourseMenu(_courseService, _userService, _currentUser, isManagementMode: true);
-                        await courseMenu.StartAsync();
+                        var courseManagementMenu = new CourseManagementMenu(_courseService, _userService, _currentUser);
+                        await courseManagementMenu.StartAsync();
                         continue;
                     }
                 }
 
-                // Admin: User Management
-                if (_currentUser.Role == UserRole.Admin && choiceInt == currentOption++)
+                // Admin opcija - User Management
+                if (_currentUser.Role == UserRole.Admin)
                 {
-                    var userManagementMenu = new UserManagementMenu(_userService);
-                    await userManagementMenu.StartAsync();
-                    continue;
+                    if (choiceInt == currentOption++)
+                    {
+                        var userManagementMenu = new UserManagementMenu(_userService);
+                        await userManagementMenu.StartAsync();
+                        continue;
+                    }
                 }
 
-                Console.WriteLine("Nepoznata opcija.");
+                // Odjava
+                if (choiceInt == currentOption)
+                {
+                    Console.WriteLine("Odjava...");
+                    break;
+                }
+
+                Console.WriteLine("Nepoznata opcija. Pritisnite tipku za nastavak...");
                 Console.ReadKey();
             }
         }
