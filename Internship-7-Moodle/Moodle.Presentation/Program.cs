@@ -16,6 +16,7 @@ services.AddInfrastructure(configuration);
 services.AddScoped<AuthMenu>();
 services.AddScoped<MainMenu>();
 services.AddScoped<ChatMenu>();
+services.AddScoped<CourseMenu>();
 
 var provider = services.BuildServiceProvider();
 

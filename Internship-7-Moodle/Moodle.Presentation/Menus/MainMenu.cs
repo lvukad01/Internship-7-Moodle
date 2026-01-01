@@ -1,7 +1,8 @@
-﻿using Moodle.Application.UseCases.Users;
+﻿
+using Moodle.Application.UseCases.Users;
 using Moodle.Application.UseCases.Messages;
+using Moodle.Application.UseCases.Courses;
 using Moodle.Domain.Enums;
-
 
 namespace Moodle.Presentation.Menus
 {
@@ -9,12 +10,14 @@ namespace Moodle.Presentation.Menus
     {
         private readonly IUserService _userService;
         private readonly IMessageService _messageService;
+        private readonly ICourseService _courseService;
         private readonly User _currentUser;
 
-        public MainMenu(IUserService userService, IMessageService messageService, User currentUser)
+        public MainMenu(IUserService userService, IMessageService messageService, ICourseService courseService, User currentUser)
         {
             _userService = userService;
             _messageService = messageService;
+            _courseService = courseService;
             _currentUser = currentUser;
         }
 
@@ -43,10 +46,10 @@ namespace Moodle.Presentation.Menus
                 Console.WriteLine($"0. Odjava");
                 Console.Write("Odabir: ");
                 var choice = Console.ReadLine();
+
                 if (choice == "0")
-                {
                     return;
-                }
+
                 if (!int.TryParse(choice, out int choiceInt))
                 {
                     Console.WriteLine("Nepoznata opcija. Pritisnite tipku za nastavak...");
@@ -56,6 +59,7 @@ namespace Moodle.Presentation.Menus
 
                 int currentOption = 1;
 
+                // Privatni chat - svi
                 if (choiceInt == currentOption++)
                 {
                     var chatMenu = new ChatMenu(_messageService, _userService, _currentUser.Id);
@@ -63,33 +67,35 @@ namespace Moodle.Presentation.Menus
                     continue;
                 }
 
+                // Student opcija - Moji kolegiji
                 if (_currentUser.Role == UserRole.Student)
                 {
                     if (choiceInt == currentOption++)
                     {
-                        Console.WriteLine("Moji kolegiji (student) (nije implementirano)");
-                        Console.ReadKey();
+                        var courseMenu = new CourseMenu(_courseService, _userService, _currentUser);
+                        await courseMenu.StartAsync();
                         continue;
                     }
                 }
 
+                // Professor opcije
                 if (_currentUser.Role == UserRole.Professor)
                 {
                     if (choiceInt == currentOption++)
                     {
-                        Console.WriteLine("Moji kolegiji (profesor) (nije implementirano)");
-                        Console.ReadKey();
+                        var courseMenu = new CourseMenu(_courseService, _userService, _currentUser);
+                        await courseMenu.StartAsync();
                         continue;
                     }
                     if (choiceInt == currentOption++)
                     {
-                        Console.WriteLine("Upravljanje kolegijima (nije implementirano)");
-                        Console.ReadKey();
+                        var courseMenu = new CourseMenu(_courseService, _userService, _currentUser);
+                        await courseMenu.StartAsync();
                         continue;
                     }
                 }
 
-                // Admin opcija
+                // Admin opcija - User Management
                 if (_currentUser.Role == UserRole.Admin)
                 {
                     if (choiceInt == currentOption++)
@@ -113,5 +119,3 @@ namespace Moodle.Presentation.Menus
         }
     }
 }
-
-

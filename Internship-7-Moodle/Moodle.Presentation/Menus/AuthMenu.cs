@@ -1,5 +1,6 @@
 ﻿using Moodle.Application.Exceptions;
 using Moodle.Application.UseCases.Auth;
+using Moodle.Application.UseCases.Courses;
 using Moodle.Application.UseCases.Messages;
 using Moodle.Application.UseCases.Users;
 
@@ -10,7 +11,7 @@ namespace Moodle.Presentation.Menus
         private readonly IAuthService _authService;
         private readonly IUserService _userService;
         private readonly IMessageService _messageService;
-
+        private readonly ICourseService _courseService;
         public AuthMenu(IAuthService authService, IUserService userService, IMessageService messageService)
         {
             _authService = authService;
@@ -65,7 +66,7 @@ namespace Moodle.Presentation.Menus
                 Console.ReadKey();
 
                 // Prosljeđujemo ulogiranog korisnika u MainMenu
-                var mainMenu = new MainMenu(_userService, _messageService, user);
+                var mainMenu = new MainMenu(_userService, _messageService, _courseService, user);
                 await mainMenu.StartAsync();
 
             }
