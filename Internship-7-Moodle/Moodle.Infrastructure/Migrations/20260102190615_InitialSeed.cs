@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Moodle.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialSeed : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -76,14 +76,14 @@ namespace Moodle.Infrastructure.Migrations
                         principalSchema: "public",
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Messages_Users_SenderId",
                         column: x => x.SenderId,
                         principalSchema: "public",
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -115,7 +115,7 @@ namespace Moodle.Infrastructure.Migrations
                         principalSchema: "public",
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -184,40 +184,69 @@ namespace Moodle.Infrastructure.Migrations
                 columns: new[] { "Id", "Email", "Password", "Role" },
                 values: new object[,]
                 {
-                    { 1, "admin@moodle.com", "HASH", 2 },
-                    { 2, "prof@moodle.com", "HASH", 1 },
-                    { 3, "student@moodle.com", "HASH", 0 }
+                    { 1, "admin@moodle.com", "admin123", 2 },
+                    { 2, "lanavukadin@moodle.com", "prof123", 1 },
+                    { 3, "prof2@moodle.com", "prof123", 1 },
+                    { 4, "student1@moodle.com", "student123", 0 },
+                    { 5, "student2@moodle.com", "student123", 0 },
+                    { 6, "student3@moodle.com", "student123", 0 }
                 });
 
             migrationBuilder.InsertData(
                 schema: "public",
                 table: "Courses",
                 columns: new[] { "Id", "Name", "ProfessorId" },
-                values: new object[] { 1, "Programiranje 1", 2 });
+                values: new object[,]
+                {
+                    { 1, "Programiranje 1", 2 },
+                    { 2, "Objektno programiranje", 2 },
+                    { 3, "Baze podataka", 3 }
+                });
 
             migrationBuilder.InsertData(
                 schema: "public",
                 table: "Messages",
                 columns: new[] { "Id", "Content", "ReceiverId", "SenderId", "SentAt" },
-                values: new object[] { 1, "Dobrodošao!", 3, 2, new DateTime(2025, 12, 30, 19, 56, 13, 569, DateTimeKind.Utc).AddTicks(9955) });
+                values: new object[,]
+                {
+                    { 1, "Dobrodošao na kolegij!", 4, 2, new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2644) },
+                    { 2, "Hvala!", 2, 4, new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2646) },
+                    { 3, "Jesi li riješio zadatak?", 6, 5, new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2648) }
+                });
 
             migrationBuilder.InsertData(
                 schema: "public",
                 table: "Announcements",
                 columns: new[] { "Id", "Content", "CourseId", "CreatedAt", "ProfessorId", "Title" },
-                values: new object[] { 1, "Dobrodošli na kolegij", 1, new DateTime(2025, 12, 30, 19, 56, 13, 569, DateTimeKind.Utc).AddTicks(9899), 2, "Dobrodošli" });
+                values: new object[,]
+                {
+                    { 1, "Dobrodošli na Programiranje 1!", 1, new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2590), 2, "Dobrodošli" },
+                    { 2, "Prvi kolokvij održat će se sljedeći tjedan.", 2, new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2592), 2, "Prvi kolokvij" },
+                    { 3, "Dodana je nova literatura.", 3, new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2594), 3, "Literatura" }
+                });
 
             migrationBuilder.InsertData(
                 schema: "public",
                 table: "Enrollments",
                 columns: new[] { "CourseId", "UserId", "EnrolledAt" },
-                values: new object[] { 1, 3, new DateTime(2025, 12, 30, 19, 56, 13, 569, DateTimeKind.Utc).AddTicks(9867) });
+                values: new object[,]
+                {
+                    { 1, 4, new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2564) },
+                    { 3, 4, new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2569) },
+                    { 1, 5, new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2566) },
+                    { 2, 6, new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2568) }
+                });
 
             migrationBuilder.InsertData(
                 schema: "public",
                 table: "Materials",
                 columns: new[] { "Id", "CourseId", "CreatedAt", "Name", "ProfessorId", "Url" },
-                values: new object[] { 1, 1, new DateTime(2025, 12, 30, 19, 56, 13, 569, DateTimeKind.Utc).AddTicks(9925), "Uvod u C#", 2, "https://example.com/csharp" });
+                values: new object[,]
+                {
+                    { 1, 1, new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2610), "Uvod u C#", 2, "https://example.com/csharp" },
+                    { 2, 2, new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2612), "OOP principi", 2, "https://example.com/oop" },
+                    { 3, 3, new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2614), "SQL osnove", 3, "https://example.com/sql" }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Announcements_CourseId",

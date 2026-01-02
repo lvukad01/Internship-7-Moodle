@@ -60,11 +60,29 @@ namespace Moodle.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            Content = "Dobrodošli na kolegij",
+                            Content = "Dobrodošli na Programiranje 1!",
                             CourseId = 1,
-                            CreatedAt = new DateTime(2025, 12, 30, 19, 56, 13, 569, DateTimeKind.Utc).AddTicks(9899),
+                            CreatedAt = new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2590),
                             ProfessorId = 2,
                             Title = "Dobrodošli"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Content = "Prvi kolokvij održat će se sljedeći tjedan.",
+                            CourseId = 2,
+                            CreatedAt = new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2592),
+                            ProfessorId = 2,
+                            Title = "Prvi kolokvij"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Content = "Dodana je nova literatura.",
+                            CourseId = 3,
+                            CreatedAt = new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2594),
+                            ProfessorId = 3,
+                            Title = "Literatura"
                         });
                 });
 
@@ -96,6 +114,18 @@ namespace Moodle.Infrastructure.Migrations
                             Id = 1,
                             Name = "Programiranje 1",
                             ProfessorId = 2
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Objektno programiranje",
+                            ProfessorId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Baze podataka",
+                            ProfessorId = 3
                         });
                 });
 
@@ -119,9 +149,27 @@ namespace Moodle.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = 3,
+                            UserId = 4,
                             CourseId = 1,
-                            EnrolledAt = new DateTime(2025, 12, 30, 19, 56, 13, 569, DateTimeKind.Utc).AddTicks(9867)
+                            EnrolledAt = new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2564)
+                        },
+                        new
+                        {
+                            UserId = 5,
+                            CourseId = 1,
+                            EnrolledAt = new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2566)
+                        },
+                        new
+                        {
+                            UserId = 6,
+                            CourseId = 2,
+                            EnrolledAt = new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2568)
+                        },
+                        new
+                        {
+                            UserId = 4,
+                            CourseId = 3,
+                            EnrolledAt = new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2569)
                         });
                 });
 
@@ -163,10 +211,28 @@ namespace Moodle.Infrastructure.Migrations
                         {
                             Id = 1,
                             CourseId = 1,
-                            CreatedAt = new DateTime(2025, 12, 30, 19, 56, 13, 569, DateTimeKind.Utc).AddTicks(9925),
+                            CreatedAt = new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2610),
                             Name = "Uvod u C#",
                             ProfessorId = 2,
                             Url = "https://example.com/csharp"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CourseId = 2,
+                            CreatedAt = new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2612),
+                            Name = "OOP principi",
+                            ProfessorId = 2,
+                            Url = "https://example.com/oop"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CourseId = 3,
+                            CreatedAt = new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2614),
+                            Name = "SQL osnove",
+                            ProfessorId = 3,
+                            Url = "https://example.com/sql"
                         });
                 });
 
@@ -203,10 +269,26 @@ namespace Moodle.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            Content = "Dobrodošao!",
-                            ReceiverId = 3,
+                            Content = "Dobrodošao na kolegij!",
+                            ReceiverId = 4,
                             SenderId = 2,
-                            SentAt = new DateTime(2025, 12, 30, 19, 56, 13, 569, DateTimeKind.Utc).AddTicks(9955)
+                            SentAt = new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2644)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Content = "Hvala!",
+                            ReceiverId = 2,
+                            SenderId = 4,
+                            SentAt = new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2646)
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Content = "Jesi li riješio zadatak?",
+                            ReceiverId = 6,
+                            SenderId = 5,
+                            SentAt = new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2648)
                         });
                 });
 
@@ -242,21 +324,42 @@ namespace Moodle.Infrastructure.Migrations
                         {
                             Id = 1,
                             Email = "admin@moodle.com",
-                            Password = "HASH",
+                            Password = "admin123",
                             Role = 2
                         },
                         new
                         {
                             Id = 2,
-                            Email = "prof@moodle.com",
-                            Password = "HASH",
+                            Email = "lanavukadin@moodle.com",
+                            Password = "prof123",
                             Role = 1
                         },
                         new
                         {
                             Id = 3,
-                            Email = "student@moodle.com",
-                            Password = "HASH",
+                            Email = "prof2@moodle.com",
+                            Password = "prof123",
+                            Role = 1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Email = "student1@moodle.com",
+                            Password = "student123",
+                            Role = 0
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Email = "student2@moodle.com",
+                            Password = "student123",
+                            Role = 0
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Email = "student3@moodle.com",
+                            Password = "student123",
                             Role = 0
                         });
                 });
@@ -272,7 +375,7 @@ namespace Moodle.Infrastructure.Migrations
                     b.HasOne("User", "Professor")
                         .WithMany("Announcements")
                         .HasForeignKey("ProfessorId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Course");
@@ -334,13 +437,13 @@ namespace Moodle.Infrastructure.Migrations
                     b.HasOne("User", "Receiver")
                         .WithMany("ReceivedMessages")
                         .HasForeignKey("ReceiverId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("User", "Sender")
                         .WithMany("SentMessages")
                         .HasForeignKey("SenderId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Receiver");

@@ -56,6 +56,9 @@ namespace Moodle.Application.UseCases.Auth
                 errors.Add(ValidationItems.User.PasswordRequired);
             else if (password != confirmPassword)
                 errors.Add(ValidationItems.User.PasswordsDoNotMatch);
+            else if (password.Length < 6)
+                errors.Add(ValidationItems.User.PasswordMinLength);
+
 
             // Captcha
             if (captchaInput != captchaExpected)

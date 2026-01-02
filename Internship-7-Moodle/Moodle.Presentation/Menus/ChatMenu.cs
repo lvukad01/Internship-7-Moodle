@@ -56,7 +56,6 @@ namespace Moodle.Presentation.Menus
             var allUsers = await _userService.GetUsersByRoleAsync(UserRole.Student);
             allUsers.AddRange(await _userService.GetUsersByRoleAsync(UserRole.Professor));
             allUsers.RemoveAll(u => u.Id == _currentUserId);
-
             if (!allUsers.Any())
             {
                 Console.WriteLine("Nema korisnika za slanje poruke.");
@@ -68,15 +67,23 @@ namespace Moodle.Presentation.Menus
             {
                 Console.WriteLine($"{i + 1}. {allUsers[i].Email} ({allUsers[i].Role})");
             }
+
+            Console.WriteLine("0. Izlaz");
+
             Console.Write("Odaberi korisnika: ");
-            if (!int.TryParse(Console.ReadLine(), out int index) || index < 1 || index > allUsers.Count)
+            if (!int.TryParse(Console.ReadLine(), out int index) || index < 0 || index > allUsers.Count)
             {
                 Console.WriteLine("Nevažeći odabir.");
                 Console.ReadKey();
                 return;
             }
-
-            var receiver = allUsers[index - 1];
+            else if (index == 0)
+            {
+                Console.WriteLine("Izlaz...");
+                Console.ReadKey();
+                return;
+            }
+                var receiver = allUsers[index - 1];
             Console.Write("Unesi poruku: ");
             var content = Console.ReadLine();
 

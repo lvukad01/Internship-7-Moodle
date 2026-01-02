@@ -66,6 +66,13 @@
                 Severity = ValidationSeverity.Error,
                 Type = ValidationType.FormalValidation
             };
+            public static readonly ValidationItem PasswordMinLength = new ValidationItem
+            {
+                Code = $"{CodePrefix}9",
+                Message = "Lozinke mora imati najmanje 6 znakova.",
+                Severity = ValidationSeverity.Error,
+                Type = ValidationType.FormalValidation
+            };
 
         }
 
