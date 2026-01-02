@@ -49,5 +49,6 @@ namespace Moodle.Application.UseCases.Messages
         {
             await _messageRepository.DeleteByUserIdAsync(userId);
         }
+
     }
 }

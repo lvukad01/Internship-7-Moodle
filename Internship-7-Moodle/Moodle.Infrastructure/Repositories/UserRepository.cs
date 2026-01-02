@@ -67,5 +67,12 @@ namespace Moodle.Infrastructure.Repositories
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
         }
+        public async Task<int> CountByRoleAsync(UserRole role)
+        {
+            return await _context.Users.CountAsync(u => u.Role == role);
+        }
+
+
+
     }
 }

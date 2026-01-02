@@ -48,5 +48,12 @@ namespace Moodle.Infrastructure.Repositories
             _context.Messages.RemoveRange(messages);
             await _context.SaveChangesAsync();
         }
+        public async Task<List<Message>> GetAllAsync()
+        {
+            return await _context.Messages
+                .Include(m => m.Sender)
+                .ToListAsync();
+        }
+
     }
 }

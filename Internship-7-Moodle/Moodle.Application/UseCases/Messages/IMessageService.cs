@@ -8,5 +8,6 @@ namespace Moodle.Application.UseCases.Messages
         Task<List<Message>> GetConversationAsync(int user1Id, int user2Id);
         Task<List<int>> GetConversationUserIdsAsync(int userId);
         Task DeleteUserMessagesAsync(int userId);
+
     }
 }

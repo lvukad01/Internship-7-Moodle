@@ -1,4 +1,6 @@
-﻿namespace Moodle.Domain.Persistence // Definiramo metode koje cemo u infrastructure koristiti za implementaciju repozitorija
+﻿using Moodle.Domain.Enums;
+
+namespace Moodle.Domain.Persistence // Definiramo metode koje cemo u infrastructure koristiti za implementaciju repozitorija
 {
     public interface IUserRepository
     {
@@ -9,10 +11,13 @@
         Task<List<User>> GetAllStudentsAsync();
         Task<List<User>> GetAllProfessorsAsync();
 
+
         IQueryable<User> Query();
 
         Task AddAsync(User user);
         Task UpdateAsync(User user);
         Task DeleteAsync(User user);
+        Task<int> CountByRoleAsync(UserRole role);
+
     }
 }

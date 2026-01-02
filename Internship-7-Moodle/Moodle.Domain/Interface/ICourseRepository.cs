@@ -7,4 +7,7 @@ public interface ICourseRepository
     Task<List<Course>> GetByStudentIdAsync(int studentId);
     Task AddAsync(Course course);
     Task SaveChangesAsync();
+    Task<int> CountAsync();
+    Task<List<Course>> GetAllAsync();
+
 }

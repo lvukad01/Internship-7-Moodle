@@ -59,5 +59,17 @@ namespace Moodle.Infrastructure.Repositories
         {
             await _context.SaveChangesAsync();
         }
+        public async Task<List<Course>> GetAllAsync()
+        {
+            return await _context.Courses
+                .Include(c => c.Enrollments)
+                .ToListAsync();
+        }
+
+        public async Task<int> CountAsync()
+        {
+            return await _context.Courses.CountAsync();
+        }
+
     }
 }

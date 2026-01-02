@@ -13,5 +13,6 @@ namespace Moodle.Application.UseCases.Users
         Task DeleteUserAsync(int userId);
         Task<List<User>> GetAllStudentsAsync();
         Task<List<User>> GetAllProfessorsAsync();
+
     }
 }
