@@ -26,7 +26,7 @@ namespace Moodle.Infrastructure.Database.Configurations
             builder.HasOne(a => a.Professor)
                 .WithMany(u => u.Announcements)
                 .HasForeignKey(a => a.ProfessorId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 

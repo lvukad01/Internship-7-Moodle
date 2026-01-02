@@ -14,11 +14,14 @@ namespace Moodle.Infrastructure.Database.Configurations
 
             builder.HasOne(e => e.User)
                 .WithMany(u => u.Enrollments)
-                .HasForeignKey(e => e.UserId);
+                .HasForeignKey(e => e.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(e => e.Course)
                 .WithMany(c => c.Enrollments)
-                .HasForeignKey(e => e.CourseId);
+                .HasForeignKey(e => e.CourseId)
+                .OnDelete(DeleteBehavior.Cascade);
+                
         }
     }
 

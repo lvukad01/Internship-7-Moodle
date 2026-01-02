@@ -102,13 +102,13 @@ namespace Moodle.Presentation.Menus
                 {
                     case "1":
                         await DeleteUserAsync(user);
-                        return; // ⬅️ izlaz → refresh liste
+                        return; 
                     case "2":
                         await ChangeEmailAsync(user);
                         break;
                     case "3":
                         await ChangeRoleAsync(user);
-                        return; // ⬅️ izlaz → refresh liste
+                        return; 
                     case "0":
                         return;
                     default:
@@ -133,6 +133,7 @@ namespace Moodle.Presentation.Menus
 
             try
             {
+              
                 await _userService.DeleteUserAsync(user.Id);
                 Console.WriteLine("Korisnik obrisan.");
             }
@@ -148,9 +149,13 @@ namespace Moodle.Presentation.Menus
 
         private async Task ChangeEmailAsync(User user)
         {
-            Console.Write("Unesite novi email: ");
+            Console.Write("Unesite novi email (za odustajanje upisite /exit): ");
             var newEmail = Console.ReadLine();
-
+            if(newEmail=="/exit")
+            {
+                Console.WriteLine("Povratak u prethodni menu");
+                Console.ReadKey();
+            }
             try
             {
                 await _userService.ChangeEmailAsync(user.Id, newEmail);
