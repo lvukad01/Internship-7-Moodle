@@ -76,7 +76,7 @@ namespace Moodle.Application.UseCases.Auth
 
         private bool IsValidEmail(string email)
         {
-            return Regex.IsMatch(email, @"^.{1,}@.{2,}\..{3,}$");
+            return Regex.IsMatch(email, @"^.{1,}@.{2,}\..{2,}$");
         }
     }
 }
