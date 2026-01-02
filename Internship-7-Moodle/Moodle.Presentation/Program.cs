@@ -16,7 +16,7 @@ services.AddScoped<AuthMenu>();
 services.AddScoped<MainMenu>();
 services.AddScoped<ChatMenu>();
 services.AddScoped<CourseMenu>();
-
+services.AddScoped<StatisticsMenu>();
 var provider = services.BuildServiceProvider();
 
 var authMenu = provider.GetRequiredService<AuthMenu>();

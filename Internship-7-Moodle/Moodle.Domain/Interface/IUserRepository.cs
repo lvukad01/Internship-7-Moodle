@@ -10,7 +10,7 @@ namespace Moodle.Domain.Persistence // Definiramo metode koje cemo u infrastruct
 
         Task<List<User>> GetAllStudentsAsync();
         Task<List<User>> GetAllProfessorsAsync();
-
+        Task<List<User>> GetAllAdminsAsync();
 
         IQueryable<User> Query();
 

@@ -1,35 +1,133 @@
 ﻿using Moodle.Application.UseCases.Statistics;
+using Moodle.Domain.Enums;
 
-public class StatisticsMenu
+namespace Moodle.Presentation.Menus
 {
-    private readonly IStatisticsService _stats;
-
-    public StatisticsMenu(IStatisticsService stats)
+    public class StatisticsMenu
     {
-        _stats = stats;
-    }
+        private readonly IStatisticsService _statisticsService;
 
-    public async Task ShowAsync()
-    {
-        Console.Clear();
-        Console.WriteLine("=== STATISTIKE ===\n");
+        public StatisticsMenu(IStatisticsService statisticsService)
+        {
+            _statisticsService = statisticsService;
+        }
 
-        var users = await _stats.GetUserCountByRoleAsync();
-        Console.WriteLine("Korisnici:");
-        foreach (var u in users)
-            Console.WriteLine($"- {u.Key}: {u.Value}");
+        public async Task StartAsync()
+        {
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("=== Statistike ===");
+                Console.WriteLine("1. Broj korisnika po rolama");
+                Console.WriteLine("2. Broj kolegija");
+                Console.WriteLine("3. Top 3 kolegija po broju studenata");
+                Console.WriteLine("4. Top 3 korisnika po broju poruka");
+                Console.WriteLine("0. Nazad");
+                Console.Write("Odabir: ");
 
-        Console.WriteLine($"\nBroj kolegija: {await _stats.GetCourseCountAsync()}");
+                var choice = Console.ReadLine();
 
-        Console.WriteLine("\nTop 3 kolegija:");
-        foreach (var c in await _stats.GetTopCoursesAsync(3))
-            Console.WriteLine($"- {c.CourseName} ({c.StudentCount})");
+                switch (choice)
+                {
+                    case "1":
+                        await ShowUserCountsAsync();
+                        break;
+                    case "2":
+                        await ShowCourseCountAsync();
+                        break;
+                    case "3":
+                        await ShowTopCoursesAsync();
+                        break;
+                    case "4":
+                        await ShowTopMessagersAsync();
+                        break;
+                    case "0":
+                        return;
+                    default:
+                        Console.WriteLine("Nepoznata opcija.");
+                        Console.ReadKey();
+                        break;
+                }
+            }
+        }
 
-        Console.WriteLine("\nTop 3 korisnika po porukama:");
-        foreach (var u in await _stats.GetTopMessagersAsync(3))
-            Console.WriteLine($"- {u.Email} ({u.MessageCount})");
+        private async Task ShowUserCountsAsync()
+        {
+            Console.Clear();
+            Console.WriteLine("=== Broj korisnika po rolama ===");
 
-        Console.ReadKey();
+            var students = await _statisticsService.GetUserCountAsync(UserRole.Student);
+            var professors = await _statisticsService.GetUserCountAsync(UserRole.Professor);
+            var admins = await _statisticsService.GetUserCountAsync(UserRole.Admin);
+
+            Console.WriteLine($"Studenti  : {students}");
+            Console.WriteLine($"Profesori : {professors}");
+            Console.WriteLine($"Admini    : {admins}");
+
+            Console.WriteLine("\nPritisnite tipku za nastavak...");
+            Console.ReadKey();
+        }
+
+        private async Task ShowCourseCountAsync()
+        {
+            Console.Clear();
+            Console.WriteLine("=== Broj kolegija ===");
+
+            var count = await _statisticsService.GetCourseCountAsync();
+            Console.WriteLine($"Ukupno kolegija: {count}");
+
+            Console.WriteLine("\nPritisnite tipku za nastavak...");
+            Console.ReadKey();
+        }
+
+        private async Task ShowTopCoursesAsync()
+        {
+            Console.Clear();
+            Console.WriteLine("=== Top 3 kolegija po broju studenata ===");
+
+            var courses = await _statisticsService.GetTopCoursesAsync(3);
+
+            if (!courses.Any())
+            {
+                Console.WriteLine("Nema podataka.");
+            }
+            else
+            {
+                int rank = 1;
+                foreach (var (name, count) in courses)
+                {
+                    Console.WriteLine($"{rank}. {name} – {count} studenata");
+                    rank++;
+                }
+            }
+
+            Console.WriteLine("\nPritisnite tipku za nastavak...");
+            Console.ReadKey();
+        }
+
+        private async Task ShowTopMessagersAsync()
+        {
+            Console.Clear();
+            Console.WriteLine("=== Top 3 korisnika po broju poruka ===");
+
+            var users = await _statisticsService.GetTopMessagersAsync(3);
+
+            if (!users.Any())
+            {
+                Console.WriteLine("Nema poruka.");
+            }
+            else
+            {
+                int rank = 1;
+                foreach (var (email, count) in users)
+                {
+                    Console.WriteLine($"{rank}. {email} – {count} poruka");
+                    rank++;
+                }
+            }
+
+            Console.WriteLine("\nPritisnite tipku za nastavak...");
+            Console.ReadKey();
+        }
     }
 }
-

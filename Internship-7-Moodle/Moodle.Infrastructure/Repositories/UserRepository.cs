@@ -44,6 +44,12 @@ namespace Moodle.Infrastructure.Repositories
                 .Where(u => u.Role == UserRole.Student)
                 .ToListAsync();
         }
+        public async Task<List<User>> GetAllAdminsAsync()
+        {
+            return await _context.Users
+                .Where(u => u.Role == UserRole.Admin)
+                .ToListAsync();
+        }
 
         public async Task<User?> GetByEmailAsync(string email)
         {

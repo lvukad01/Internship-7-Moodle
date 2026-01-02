@@ -99,7 +99,6 @@ namespace Moodle.Application.UseCases.Courses
             await _courseRepository.SaveChangesAsync();
         }
 
-
     }
 }
 

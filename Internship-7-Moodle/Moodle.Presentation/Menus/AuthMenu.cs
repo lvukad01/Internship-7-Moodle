@@ -2,6 +2,7 @@
 using Moodle.Application.UseCases.Auth;
 using Moodle.Application.UseCases.Courses;
 using Moodle.Application.UseCases.Messages;
+using Moodle.Application.UseCases.Statistics;
 using Moodle.Application.UseCases.Users;
 
 namespace Moodle.Presentation.Menus
@@ -12,13 +13,14 @@ namespace Moodle.Presentation.Menus
         private readonly IUserService _userService;
         private readonly IMessageService _messageService;
         private readonly ICourseService _courseService;
-
-        public AuthMenu(IAuthService authService, IUserService userService, IMessageService messageService, ICourseService courseService)
+        private readonly IStatisticsService _statisticsService;
+        public AuthMenu(IAuthService authService, IUserService userService, IMessageService messageService, ICourseService courseService,IStatisticsService statisticsService)
         {
             _authService = authService;
             _userService = userService;
             _messageService = messageService;
             _courseService = courseService;
+            _statisticsService = statisticsService;
         }
 
         public async Task StartAsync()
@@ -68,7 +70,7 @@ namespace Moodle.Presentation.Menus
                 Console.WriteLine($"Uspješno prijavljeni: {user.Email} ({user.Role})");
                 Console.ReadKey();
 
-                var mainMenu = new MainMenu(_userService, _messageService, _courseService, user);
+                var mainMenu = new MainMenu(_userService, _messageService, _courseService,_statisticsService, user);
                 await mainMenu.StartAsync();
             }
             catch (ValidationException ex)

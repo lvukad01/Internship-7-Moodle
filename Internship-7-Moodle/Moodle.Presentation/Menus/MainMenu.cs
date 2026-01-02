@@ -2,6 +2,7 @@
 using Moodle.Application.UseCases.Messages;
 using Moodle.Application.UseCases.Courses;
 using Moodle.Domain.Enums;
+using Moodle.Application.UseCases.Statistics;
 
 namespace Moodle.Presentation.Menus
 {
@@ -10,13 +11,15 @@ namespace Moodle.Presentation.Menus
         private readonly IUserService _userService;
         private readonly IMessageService _messageService;
         private readonly ICourseService _courseService;
+        private readonly IStatisticsService _statisticsService;
         private readonly User _currentUser;
 
-        public MainMenu(IUserService userService, IMessageService messageService, ICourseService courseService, User currentUser)
+        public MainMenu(IUserService userService, IMessageService messageService, ICourseService courseService, IStatisticsService statisticsService, User currentUser)
         {
             _userService = userService;
             _messageService = messageService;
             _courseService = courseService;
+            _statisticsService = statisticsService;
             _currentUser = currentUser;
         }
 
@@ -40,7 +43,10 @@ namespace Moodle.Presentation.Menus
                 }
 
                 if (_currentUser.Role == UserRole.Admin)
+                {
                     Console.WriteLine($"{optionNumber++}. Upravljanje korisnicima");
+                    Console.WriteLine($"{optionNumber++}. Statistike");
+                }
 
                 Console.WriteLine("0. Odjava");
                 Console.Write("Odabir: ");
@@ -96,6 +102,12 @@ namespace Moodle.Presentation.Menus
                     {
                         var userManagementMenu = new UserManagementMenu(_userService);
                         await userManagementMenu.StartAsync();
+                        continue;
+                    }
+                    if (choiceInt == currentOption++)
+                    {
+                        var statisticsMenu = new StatisticsMenu(_statisticsService);
+                        await statisticsMenu.StartAsync();
                         continue;
                     }
                 }
