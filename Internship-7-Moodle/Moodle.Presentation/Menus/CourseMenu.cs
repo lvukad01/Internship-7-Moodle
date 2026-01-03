@@ -2,6 +2,7 @@
 using Moodle.Application.UseCases.Users;
 using Moodle.Domain.Entities;
 using Moodle.Domain.Enums;
+using Moodle.Presentation.Common;
 
 namespace Moodle.Presentation.Menus
 {
@@ -10,58 +11,40 @@ namespace Moodle.Presentation.Menus
         private readonly ICourseService _courseService;
         private readonly IUserService _userService;
         private readonly User _currentUser;
-        private readonly bool _isManagementMode;
 
-        public CourseMenu(ICourseService courseService, IUserService userService, User currentUser, bool isManagementMode = false)
+        public CourseMenu(ICourseService courseService, IUserService userService, User currentUser)
         {
             _courseService = courseService;
             _userService = userService;
             _currentUser = currentUser;
-            _isManagementMode = isManagementMode;
         }
 
         public async Task StartAsync()
         {
             while (true)
             {
-                Console.Clear();
-                Console.WriteLine(_isManagementMode ? "=== Upravljanje kolegijima ===" : "=== Moji kolegiji ===");
-
                 List<Course> courses = _currentUser.Role == UserRole.Student
                     ? await _courseService.GetByStudentIdAsync(_currentUser.Id)
                     : await _courseService.GetByProfessorIdAsync(_currentUser.Id);
 
-                if (courses == null || courses.Count == 0)
+                if (!courses.Any())
                 {
                     Console.WriteLine("Nema kolegija za prikaz.");
                     Console.ReadKey();
                     return;
                 }
 
-                foreach (var c in courses)
-                {
-                    c.Professor ??= new User { Email = "Nepoznati profesor" };
-                    c.Enrollments ??= new List<Enrollment>();
-                    c.Announcements ??= new List<Announcement>();
-                    c.Materials ??= new List<Material>();
-                }
+                var options = courses
+                    .Select(c => $"{c.Name} ({c.Professor?.Email ?? "Nepoznati profesor"})")
+                    .Append("Povratak")
+                    .ToList();
 
-                for (int i = 0; i < courses.Count; i++)
-                    Console.WriteLine($"{i + 1}. {courses[i].Name} ({courses[i].Professor.Email})");
+                int choice = MenuNavigator.Show("MOJI KOLEGIJI", options);
 
-                Console.WriteLine("0. Povratak");
-                Console.Write("Odabir kolegija: ");
-                var input = Console.ReadLine();
-                if (input == "0") return;
-                if (!int.TryParse(input, out int selectedIndex) || selectedIndex < 1 || selectedIndex > courses.Count)
-                {
-                    Console.WriteLine("Nevažeći odabir.");
-                    Console.ReadKey();
-                    continue;
-                }
+                if (choice == -1 || choice == courses.Count)
+                    return;
 
-                var selectedCourse = courses[selectedIndex - 1];
-                await ShowCourseAsync(selectedCourse);
+                await ShowCourseAsync(courses[choice]);
             }
         }
 
@@ -69,101 +52,102 @@ namespace Moodle.Presentation.Menus
         {
             while (true)
             {
-                Console.Clear();
-                Console.WriteLine($"=== {course.Name} ===");
-                Console.WriteLine("1. Obavijesti");
-                Console.WriteLine("2. Materijali");
+                var options = new List<string>
+                {
+                    "Obavijesti",
+                    "Materijali"
+                };
 
                 if (_currentUser.Role == UserRole.Professor)
-                    Console.WriteLine("3. Pregled studenata");
+                    options.Add("Pregled studenata");
 
-                Console.WriteLine("0. Povratak");
-                Console.Write("Odabir: ");
-                var choice = Console.ReadLine();
+                options.Add("Povratak");
 
-                if (choice == "0") return;
+                int choice = MenuNavigator.Show($" {course.Name} ", options);
 
-                switch (choice)
-                {
-                    case "1":
-                        ShowAnnouncements(course);
-                        break;
-                    case "2":
-                        ShowMaterials(course);
-                        break;
-                    case "3":
-                        if (_currentUser.Role == UserRole.Professor)
-                            ShowStudents(course);
-                        else
-                            InvalidOption();
-                        break;
-                    default:
-                        InvalidOption();
-                        break;
-                }
+                if (choice == -1 || choice == options.Count - 1)
+                    return;
+
+                if (choice == 0)
+                    ShowAnnouncements(course);
+
+                if (choice == 1)
+                    ShowMaterials(course);
+
+                if (choice == 2 && _currentUser.Role == UserRole.Professor)
+                    ShowStudents(course);
             }
         }
 
         private void ShowAnnouncements(Course course)
         {
             Console.Clear();
-            Console.WriteLine($"=== Obavijesti za {course.Name} ===");
+            Console.WriteLine($"Obavijesti za {course.Name} ");
 
-            var announcements = course.Announcements ?? new List<Announcement>();
-            if (!announcements.Any())
+            if (!course.Announcements.Any())
+            {
                 Console.WriteLine("Nema obavijesti.");
+            }
             else
             {
-                foreach (var ann in announcements.OrderByDescending(a => a.CreatedAt))
+                foreach (var ann in course.Announcements.OrderByDescending(a => a.CreatedAt))
+                {
                     Console.WriteLine($"{ann.CreatedAt:dd.MM.yyyy HH:mm} - {ann.Title}: {ann.Content}");
+                }
             }
 
-            Console.WriteLine("Pritisnite tipku za povratak...");
+            Console.WriteLine("\nPritisnite bilo koju tipku za povratak...");
             Console.ReadKey();
         }
 
         private void ShowMaterials(Course course)
         {
             Console.Clear();
-            Console.WriteLine($"=== Materijali za {course.Name} ===");
+            Console.WriteLine($" Materijali za {course.Name} ");
 
-            var materials = course.Materials ?? new List<Material>();
-            if (!materials.Any())
+            if (!course.Materials.Any())
+            {
                 Console.WriteLine("Nema materijala.");
+            }
             else
             {
-                foreach (var mat in materials.OrderByDescending(m => m.CreatedAt))
+                foreach (var mat in course.Materials.OrderByDescending(m => m.CreatedAt))
+                {
                     Console.WriteLine($"{mat.CreatedAt:dd.MM.yyyy HH:mm} - {mat.Name}: {mat.Url}");
+                }
             }
 
-            Console.WriteLine("Pritisnite tipku za povratak...");
+            Console.WriteLine("\nPritisnite bilo koju tipku za povratak...");
             Console.ReadKey();
         }
 
         private void ShowStudents(Course course)
         {
             Console.Clear();
-            Console.WriteLine($"=== Studenti na {course.Name} ===");
+            Console.WriteLine($"Studenti na {course.Name} ");
 
-            var students = course.Enrollments?.Select(e => e.User).Where(u => u != null).OrderBy(u => u.Email).ToList() ?? new List<User>();
+            var students = course.Enrollments
+                .Select(e => e.User)
+                .Where(u => u != null)
+                .OrderBy(u => u.Email)
+                .ToList();
 
             if (!students.Any())
+            {
                 Console.WriteLine("Nema upisanih studenata.");
+            }
             else
             {
-                for (int i = 0; i < students.Count; i++)
-                    Console.WriteLine($"{i + 1}. {students[i].Email}");
+                foreach (var s in students)
+                {
+                    Console.WriteLine(s.Email);
+                }
             }
 
-            Console.WriteLine("Pritisnite tipku za povratak...");
-            Console.ReadKey();
-        }
-
-        private void InvalidOption()
-        {
-            Console.WriteLine("Nepoznata opcija.");
+            Console.WriteLine("\nPritisnite bilo koju tipku za povratak...");
             Console.ReadKey();
         }
     }
 }
+
 

@@ -18,19 +18,16 @@ namespace Moodle.Infrastructure.DI
             this IServiceCollection services,
             IConfiguration configuration)
         {
-            // DbContext
             services.AddDbContext<MoodleDbContext>(options =>
                 options.UseNpgsql(
                     configuration.GetConnectionString("MoodleDbContext")));
 
-            // Repositories
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IMessageRepository, MessageRepository>();
             services.AddScoped<ICourseRepository, CourseRepository>();
             services.AddScoped<IEnrollmentRepository, EnrollmentRepository>();
           
 
-            // Application services
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IMessageService, MessageService>();

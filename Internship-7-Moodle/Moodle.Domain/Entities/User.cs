@@ -10,7 +10,7 @@ public class User : BaseEntity
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow; 
 
 
-    //Navigations
+    //Navigacije
     public ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
 
     public ICollection<Course> CoursesTaught { get; set; } = new List<Course>();

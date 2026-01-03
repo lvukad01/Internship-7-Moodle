@@ -22,6 +22,7 @@ namespace Moodle.Application.UseCases.Users
             {
                 UserRole.Student => await _userRepository.GetAllStudentsAsync(),
                 UserRole.Professor => await _userRepository.GetAllProfessorsAsync(),
+                UserRole.Admin => await _userRepository.GetAllAdminsAsync(), 
                 _ => throw new ValidationException(new ValidationItem
                 {
                     Code = "User9",

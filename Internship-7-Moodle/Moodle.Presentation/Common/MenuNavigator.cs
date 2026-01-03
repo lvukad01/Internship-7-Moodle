@@ -19,7 +19,7 @@
                 {
                     if (i == selectedIndex)
                     {
-                        Console.ForegroundColor = ConsoleColor.DarkBlue;
+                        Console.ForegroundColor = ConsoleColor.Magenta;
                         Console.BackgroundColor = ConsoleColor.Gray;
                         Console.WriteLine($"> {options[i]}");
                         Console.ResetColor();

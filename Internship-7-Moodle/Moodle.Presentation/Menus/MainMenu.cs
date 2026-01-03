@@ -33,15 +33,10 @@ namespace Moodle.Presentation.Menus
         {
             while (true)
             {
-                var options = new List<string>
-                {
-                    "Privatni chat"
-                };
+                var options = new List<string> { "Privatni chat" };
 
                 if (_currentUser.Role == UserRole.Student)
-                {
                     options.Add("Moji kolegiji");
-                }
 
                 if (_currentUser.Role == UserRole.Professor)
                 {
@@ -57,10 +52,7 @@ namespace Moodle.Presentation.Menus
 
                 options.Add("Odjava");
 
-                int choice = MenuNavigator.Show(
-                    $" MAIN MENU ({_currentUser.Role}) ",
-                    options
-                );
+                int choice = MenuNavigator.Show($" MAIN MENU ({_currentUser.Role}) ", options);
 
                 if (choice == -1)
                     return;
@@ -92,11 +84,9 @@ namespace Moodle.Presentation.Menus
                         await courseMenu.StartAsync();
                         continue;
                     }
-
                     if (choice == index++)
                     {
-                        var courseManagementMenu =
-                            new CourseManagementMenu(_courseService, _userService, _currentUser);
+                        var courseManagementMenu = new CourseManagementMenu(_courseService, _userService, _currentUser);
                         await courseManagementMenu.StartAsync();
                         continue;
                     }
@@ -110,7 +100,6 @@ namespace Moodle.Presentation.Menus
                         await userManagementMenu.StartAsync();
                         continue;
                     }
-
                     if (choice == index++)
                     {
                         var statisticsMenu = new StatisticsMenu(_statisticsService);
@@ -119,7 +108,12 @@ namespace Moodle.Presentation.Menus
                     }
                 }
 
-                return;
+                if (choice == index)
+                {
+                    Console.WriteLine("Odjava...");
+                    Console.ReadKey();
+                    return;
+                }
             }
         }
     }

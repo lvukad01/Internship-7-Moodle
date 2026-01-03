@@ -10,15 +10,12 @@ namespace Moodle.Domain.Entities
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow; 
 
 
-        // Professor
         public int ProfessorId { get; set; }
         public User Professor { get; set; } = null!;
 
-        // Students
         public ICollection<Enrollment> Enrollments { get; set; }
             = new List<Enrollment>();
 
-        // Content
         public ICollection<Announcement> Announcements { get; set; }
             = new List<Announcement>();
 

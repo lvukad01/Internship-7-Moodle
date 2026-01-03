@@ -1,5 +1,6 @@
 ﻿using Moodle.Application.UseCases.Statistics;
 using Moodle.Domain.Enums;
+using Moodle.Presentation.Common;
 
 namespace Moodle.Presentation.Menus
 {
@@ -16,36 +17,33 @@ namespace Moodle.Presentation.Menus
         {
             while (true)
             {
-                Console.Clear();
-                Console.WriteLine("=== Statistike ===");
-                Console.WriteLine("1. Broj korisnika po rolama");
-                Console.WriteLine("2. Broj kolegija");
-                Console.WriteLine("3. Top 3 kolegija po broju studenata");
-                Console.WriteLine("4. Top 3 korisnika po broju poruka");
-                Console.WriteLine("0. Nazad");
-                Console.Write("Odabir: ");
+                var options = new List<string>
+                {
+                    "Broj korisnika po rolama",
+                    "Broj kolegija",
+                    "Top 3 kolegija po broju studenata",
+                    "Top 3 korisnika po broju poruka",
+                    "Nazad"
+                };
 
-                var choice = Console.ReadLine();
+                int choice = MenuNavigator.Show("STATISTIKE", options);
+
+                if (choice == -1 || choice == options.Count - 1)
+                    return;
 
                 switch (choice)
                 {
-                    case "1":
+                    case 0:
                         await ShowUserCountsAsync();
                         break;
-                    case "2":
+                    case 1:
                         await ShowCourseCountAsync();
                         break;
-                    case "3":
+                    case 2:
                         await ShowTopCoursesAsync();
                         break;
-                    case "4":
+                    case 3:
                         await ShowTopMessagersAsync();
-                        break;
-                    case "0":
-                        return;
-                    default:
-                        Console.WriteLine("Nepoznata opcija.");
-                        Console.ReadKey();
                         break;
                 }
             }
@@ -53,24 +51,25 @@ namespace Moodle.Presentation.Menus
 
         private (DateTime? from, DateTime? to) ChooseTimeRange()
         {
-            Console.WriteLine("Odaberite vremenski raspon:");
-            Console.WriteLine("1. Danas");
-            Console.WriteLine("2. Ovaj mjesec");
-            Console.WriteLine("3. Ukupno");
-            Console.Write("Odabir: ");
+            var options = new List<string>
+            {
+                "Danas",
+                "Ovaj mjesec",
+                "Ukupno"
+            };
 
-            var choice = Console.ReadLine();
+            int choice = MenuNavigator.Show("Odaberite vremenski raspon", options);
             var now = DateTime.UtcNow;
 
             return choice switch
             {
-                "1" => (
-                    from: new DateTime(now.Year, now.Month, now.Day, 0, 0, 0, DateTimeKind.Utc),
-                    to: new DateTime(now.Year, now.Month, now.Day, 23, 59, 59, 999, DateTimeKind.Utc)
+                0 => (
+                    new DateTime(now.Year, now.Month, now.Day, 0, 0, 0, DateTimeKind.Utc),
+                    new DateTime(now.Year, now.Month, now.Day, 23, 59, 59, 999, DateTimeKind.Utc)
                 ),
-                "2" => (
-                    from: new DateTime(now.Year, now.Month, 1, 0, 0, 0, DateTimeKind.Utc),
-                    to: new DateTime(now.Year, now.Month, DateTime.DaysInMonth(now.Year, now.Month), 23, 59, 59, 999, DateTimeKind.Utc)
+                1 => (
+                    new DateTime(now.Year, now.Month, 1, 0, 0, 0, DateTimeKind.Utc),
+                    new DateTime(now.Year, now.Month, DateTime.DaysInMonth(now.Year, now.Month), 23, 59, 59, 999, DateTimeKind.Utc)
                 ),
                 _ => (null, null)
             };
@@ -79,71 +78,65 @@ namespace Moodle.Presentation.Menus
         private async Task ShowUserCountsAsync()
         {
             Console.Clear();
-            Console.WriteLine("=== Broj korisnika po rolama ===");
+            Console.WriteLine(" BROJ KORISNIKA PO ROLAMA ");
+
             var (from, to) = ChooseTimeRange();
 
-            var students = await _statisticsService.GetUserCountAsync(UserRole.Student, from, to);
-            var professors = await _statisticsService.GetUserCountAsync(UserRole.Professor, from, to);
-            var admins = await _statisticsService.GetUserCountAsync(UserRole.Admin, from, to);
+            Console.WriteLine($"Studenti  : {await _statisticsService.GetUserCountAsync(UserRole.Student, from, to)}");
+            Console.WriteLine($"Profesori : {await _statisticsService.GetUserCountAsync(UserRole.Professor, from, to)}");
+            Console.WriteLine($"Admini    : {await _statisticsService.GetUserCountAsync(UserRole.Admin, from, to)}");
 
-            Console.WriteLine($"Studenti  : {students}");
-            Console.WriteLine($"Profesori : {professors}");
-            Console.WriteLine($"Admini    : {admins}");
-            Console.WriteLine("\nPritisnite tipku za nastavak...");
             Console.ReadKey();
         }
 
         private async Task ShowCourseCountAsync()
         {
             Console.Clear();
-            Console.WriteLine("=== Broj kolegija ===");
-            var (from, to) = ChooseTimeRange();
+            Console.WriteLine("BROJ KOLEGIJA ");
 
-            var count = await _statisticsService.GetCourseCountAsync(from, to);
-            Console.WriteLine($"Ukupno kolegija: {count}");
-            Console.WriteLine("\nPritisnite tipku za nastavak...");
+            var (from, to) = ChooseTimeRange();
+            Console.WriteLine($"Ukupno kolegija: {await _statisticsService.GetCourseCountAsync(from, to)}");
+
             Console.ReadKey();
         }
 
         private async Task ShowTopCoursesAsync()
         {
             Console.Clear();
-            Console.WriteLine("=== Top 3 kolegija po broju studenata ===");
-            var (from, to) = ChooseTimeRange();
+            Console.WriteLine(" TOP 3 KOLEGIJA PO BROJU STUDENATA ");
 
+            var (from, to) = ChooseTimeRange();
             var courses = await _statisticsService.GetTopCoursesAsync(3, from, to);
-            if (!courses.Any()) Console.WriteLine("Nema podataka.");
+
+            if (!courses.Any())
+                Console.WriteLine("Nema podataka.");
             else
             {
                 int rank = 1;
                 foreach (var (name, count) in courses)
-                {
-                    Console.WriteLine($"{rank}. {name} – {count} studenata");
-                    rank++;
-                }
+                    Console.WriteLine($"{rank++}. {name} – {count} studenata");
             }
-            Console.WriteLine("\nPritisnite tipku za nastavak...");
+
             Console.ReadKey();
         }
 
         private async Task ShowTopMessagersAsync()
         {
             Console.Clear();
-            Console.WriteLine("=== Top 3 korisnika po broju poruka ===");
-            var (from, to) = ChooseTimeRange();
+            Console.WriteLine(" TOP 3 KORISNIKA PO BROJU PORUKA ");
 
+            var (from, to) = ChooseTimeRange();
             var users = await _statisticsService.GetTopMessagersAsync(3, from, to);
-            if (!users.Any()) Console.WriteLine("Nema poruka.");
+
+            if (!users.Any())
+                Console.WriteLine("Nema poruka.");
             else
             {
                 int rank = 1;
                 foreach (var (email, count) in users)
-                {
-                    Console.WriteLine($"{rank}. {email} – {count} poruka");
-                    rank++;
-                }
+                    Console.WriteLine($"{rank++}. {email} – {count} poruka");
             }
-            Console.WriteLine("\nPritisnite tipku za nastavak...");
+
             Console.ReadKey();
         }
     }

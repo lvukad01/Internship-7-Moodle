@@ -1,7 +1,7 @@
 ﻿using Moodle.Application.Exceptions;
 using Moodle.Application.UseCases.Users;
-using Moodle.Domain.Entities;
 using Moodle.Domain.Enums;
+using Moodle.Presentation.Common;
 
 namespace Moodle.Presentation.Menus
 {
@@ -18,29 +18,20 @@ namespace Moodle.Presentation.Menus
         {
             while (true)
             {
-                Console.Clear();
-                Console.WriteLine("=== User management ===");
-                Console.WriteLine("1. Upravljanje studentima");
-                Console.WriteLine("2. Upravljanje profesorima");
-                Console.WriteLine("0. Nazad");
-                Console.Write("Odabir: ");
-
-                var choice = Console.ReadLine();
-                switch (choice)
+                var options = new List<string>
                 {
-                    case "1":
-                        await ManageUsersAsync(UserRole.Student);
-                        break;
-                    case "2":
-                        await ManageUsersAsync(UserRole.Professor);
-                        break;
-                    case "0":
-                        return;
-                    default:
-                        Console.WriteLine("Nepoznata opcija.");
-                        Console.ReadKey();
-                        break;
-                }
+                    "Upravljanje studentima",
+                    "Upravljanje profesorima",
+                    "Nazad"
+                };
+
+                int choice = MenuNavigator.Show("USER MANAGEMENT", options);
+
+                if (choice == -1 || choice == options.Count - 1)
+                    return;
+
+                var role = choice == 0 ? UserRole.Student : UserRole.Professor;
+                await ManageUsersAsync(role);
             }
         }
 
@@ -50,38 +41,26 @@ namespace Moodle.Presentation.Menus
             {
                 var users = await _userService.GetUsersByRoleAsync(role);
 
-                Console.Clear();
-                Console.WriteLine($"=== Upravljanje {role} ===");
-
                 if (!users.Any())
                 {
+                    Console.Clear();
                     Console.WriteLine($"Nema korisnika s rolom {role}.");
                     Console.ReadKey();
                     return;
                 }
 
-                for (int i = 0; i < users.Count; i++)
-                {
-                    Console.WriteLine($"{i + 1}. {users[i].Email} (ID: {users[i].Id})");
-                }
+                var options = users
+                    .Select(u => $"{u.Email} (ID: {u.Id})")
+                    .ToList();
 
-                Console.WriteLine("0. Nazad");
-                Console.Write("Odaberite korisnika: ");
+                options.Add("Nazad");
 
-                if (!int.TryParse(Console.ReadLine(), out int selected) ||
-                    selected < 0 || selected > users.Count)
-                {
-                    Console.WriteLine("Neispravan unos.");
-                    Console.ReadKey();
-                    continue;
-                }
+                int choice = MenuNavigator.Show($"UPRAVLJANJE {role} ", options);
 
-                if (selected == 0)
+                if (choice == -1 || choice == options.Count - 1)
                     return;
 
-                var user = users[selected - 1];
-                await UserActionMenuAsync(user);
-                // ⬅️ nakon povratka se lista ponovo učita
+                await UserActionMenuAsync(users[choice]);
             }
         }
 
@@ -89,38 +68,42 @@ namespace Moodle.Presentation.Menus
         {
             while (true)
             {
-                Console.Clear();
-                Console.WriteLine($"=== Akcije za {user.Email} (ID: {user.Id}) ===");
-                Console.WriteLine("1. Obriši korisnika");
-                Console.WriteLine("2. Promijeni email");
-                Console.WriteLine("3. Promijeni rolu");
-                Console.WriteLine("0. Nazad");
-                Console.Write("Odabir: ");
+                var options = new List<string>
+                {
+                    "Obriši korisnika",
+                    "Promijeni email",
+                    "Promijeni rolu",
+                    "Nazad"
+                };
 
-                var choice = Console.ReadLine();
+                int choice = MenuNavigator.Show(
+                    $"AKCIJE ZA {user.Email} (ID: {user.Id}) ",
+                    options
+                );
+
+                if (choice == -1 || choice == options.Count - 1)
+                    return;
+
                 switch (choice)
                 {
-                    case "1":
+                    case 0:
                         await DeleteUserAsync(user);
-                        return; 
-                    case "2":
+                        return;
+
+                    case 1:
                         await ChangeEmailAsync(user);
                         break;
-                    case "3":
+
+                    case 2:
                         await ChangeRoleAsync(user);
-                        return; 
-                    case "0":
                         return;
-                    default:
-                        Console.WriteLine("Nepoznata opcija.");
-                        Console.ReadKey();
-                        break;
                 }
             }
         }
 
         private async Task DeleteUserAsync(User user)
         {
+            Console.Clear();
             Console.Write($"Jeste li sigurni da želite obrisati korisnika {user.Email}? (y/n): ");
             var confirm = Console.ReadLine();
 
@@ -133,7 +116,6 @@ namespace Moodle.Presentation.Menus
 
             try
             {
-              
                 await _userService.DeleteUserAsync(user.Id);
                 Console.WriteLine("Korisnik obrisan.");
             }
@@ -149,13 +131,13 @@ namespace Moodle.Presentation.Menus
 
         private async Task ChangeEmailAsync(User user)
         {
-            Console.Write("Unesite novi email (za odustajanje upisite /exit): ");
+            Console.Clear();
+            Console.Write("Unesite novi email (za odustajanje upišite /exit): ");
             var newEmail = Console.ReadLine();
-            if(newEmail=="/exit")
-            {
-                Console.WriteLine("Povratak u prethodni menu");
-                Console.ReadKey();
-            }
+
+            if (newEmail == "/exit")
+                return;
+
             try
             {
                 await _userService.ChangeEmailAsync(user.Id, newEmail);
@@ -173,6 +155,7 @@ namespace Moodle.Presentation.Menus
 
         private async Task ChangeRoleAsync(User user)
         {
+            Console.Clear();
             Console.WriteLine($"Trenutna rola: {user.Role}");
 
             UserRole newRole = user.Role == UserRole.Student
@@ -183,7 +166,7 @@ namespace Moodle.Presentation.Menus
             var input = Console.ReadLine();
 
             if (input?.Trim().ToLower() != "y")
-            { 
+            {
                 Console.WriteLine("Promjena role otkazana.");
                 Console.ReadKey();
                 return;

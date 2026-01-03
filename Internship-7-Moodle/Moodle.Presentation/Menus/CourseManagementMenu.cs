@@ -2,6 +2,7 @@
 using Moodle.Application.UseCases.Courses;
 using Moodle.Application.UseCases.Users;
 using Moodle.Domain.Entities;
+using Moodle.Presentation.Common;
 
 namespace Moodle.Presentation.Menus
 {
@@ -22,39 +23,21 @@ namespace Moodle.Presentation.Menus
         {
             while (true)
             {
-                Console.Clear();
-                Console.WriteLine("=== Upravljanje kolegijima ===");
-
                 var courses = await _courseService.GetByProfessorIdAsync(_currentUser.Id);
-
-                if (courses == null || !courses.Any())
+                if (!courses.Any())
                 {
                     Console.WriteLine("Nemate dodijeljenih kolegija.");
-                    Console.WriteLine("Pritisnite bilo koju tipku za povratak...");
                     Console.ReadKey();
                     return;
                 }
 
-                for (int i = 0; i < courses.Count; i++)
-                {
-                    Console.WriteLine($"{i + 1}. {courses[i].Name}");
-                }
+                var options = courses.Select(c => c.Name).Append("Povratak").ToList();
+                var choice = MenuNavigator.Show("UPRAVLJANJE KOLEGIJIMA", options);
 
-                Console.WriteLine("0. Povratak");
-                Console.Write("Odabir kolegija: ");
-                var input = Console.ReadLine();
+                if (choice == -1 || choice == courses.Count)
+                    return;
 
-                if (input == "0") return;
-
-                if (!int.TryParse(input, out int selectedIndex) || selectedIndex < 1 || selectedIndex > courses.Count)
-                {
-                    Console.WriteLine("Nevažeći odabir. Pritisnite tipku za nastavak...");
-                    Console.ReadKey();
-                    continue;
-                }
-
-                var selectedCourse = courses[selectedIndex - 1];
-                await ShowCourseManagementAsync(selectedCourse);
+                await ShowCourseManagementAsync(courses[choice]);
             }
         }
 
@@ -62,41 +45,32 @@ namespace Moodle.Presentation.Menus
         {
             while (true)
             {
-                Console.Clear();
-                Console.WriteLine($"=== Upravljanje kolegijem: {course.Name} ===");
-                Console.WriteLine("1. Dodaj studenta");
-                Console.WriteLine("2. Objavi obavijest");
-                Console.WriteLine("3. Dodaj materijal");
-                Console.WriteLine("0. Povratak");
-                Console.Write("Odabir: ");
-                var choice = Console.ReadLine();
+                var choice = MenuNavigator.Show(
+                    $" UPRAVLJANJE KOLEGIJEM: {course.Name} ",
+                    new List<string>
+                    {
+                        "Dodaj studenta",
+                        "Objavi obavijest",
+                        "Dodaj materijal",
+                        "Povratak"
+                    });
 
-                switch (choice)
-                {
-                    case "1":
-                        await AddStudentAsync(course);
-                        break;
-                    case "2":
-                        await AddAnnouncementAsync(course);
-                        break;
-                    case "3":
-                        await AddMaterialAsync(course);
-                        break;
-                    case "0":
-                        return;
-                    default:
-                        Console.WriteLine("Nepoznata opcija.");
-                        Console.ReadKey();
-                        break;
-                }
+                if (choice == -1 || choice == 3)
+                    return;
+
+                if (choice == 0)
+                    await AddStudentAsync(course);
+
+                if (choice == 1)
+                    await AddAnnouncementAsync(course);
+
+                if (choice == 2)
+                    await AddMaterialAsync(course);
             }
         }
 
         private async Task AddStudentAsync(Course course)
         {
-            Console.Clear();
-            Console.WriteLine($"=== Dodavanje studenta na {course.Name} ===");
-
             var students = await _userService.GetAllStudentsAsync();
             var availableStudents = students
                 .Where(s => !course.Enrollments.Any(e => e.UserId == s.Id))
@@ -104,41 +78,32 @@ namespace Moodle.Presentation.Menus
 
             if (!availableStudents.Any())
             {
-                Console.WriteLine("Nema dostupnih studenata za dodavanje.");
-                Console.WriteLine("Pritisnite tipku za povratak...");
+                Console.WriteLine("Nema dostupnih studenata.");
                 Console.ReadKey();
                 return;
             }
 
-            for (int i = 0; i < availableStudents.Count; i++)
-            {
-                Console.WriteLine($"{i + 1}. {availableStudents[i].Email}");
-            }
+            var options = availableStudents
+                .Select(s => s.Email)
+                .Append("Povratak")
+                .ToList();
 
-            Console.WriteLine("0. Povratak");
-            Console.Write("Odabir studenta: ");
-            var input = Console.ReadLine();
+            var choice = MenuNavigator.Show($" Dodaj studenta na {course.Name} ", options);
 
-            if (input == "0") return;
-
-            if (!int.TryParse(input, out int selectedIndex) || selectedIndex < 1 || selectedIndex > availableStudents.Count)
-            {
-                Console.WriteLine("Nevažeći odabir.");
-                Console.ReadKey();
+            if (choice == -1 || choice == availableStudents.Count)
                 return;
-            }
 
-            var student = availableStudents[selectedIndex - 1];
+            var student = availableStudents[choice];
             await _courseService.EnrollStudentAsync(course.Id, student.Id);
-            Console.WriteLine($"Student {student.Email} uspješno dodan na kolegij {course.Name}.");
-            Console.WriteLine("Pritisnite tipku za nastavak...");
+
+            Console.WriteLine($"Student {student.Email} dodan na kolegij.");
             Console.ReadKey();
         }
 
         private async Task AddAnnouncementAsync(Course course)
         {
             Console.Clear();
-            Console.WriteLine($"=== Objavi obavijest za {course.Name} ===");
+            Console.WriteLine($"Objavi obavijest ({course.Name}) ");
 
             Console.Write("Naslov: ");
             var title = Console.ReadLine();
@@ -149,23 +114,22 @@ namespace Moodle.Presentation.Menus
             try
             {
                 await _courseService.AddAnnouncementAsync(course.Id, title, content);
-                Console.WriteLine("Obavijest uspješno objavljena.");
+                Console.WriteLine("Obavijest objavljena.");
             }
             catch (ValidationException ex)
             {
-                Console.WriteLine("Greška prilikom objave obavijesti:");
+                Console.WriteLine("Greška:");
                 foreach (var err in ex.Errors)
                     Console.WriteLine("- " + err.Message);
             }
 
-            Console.WriteLine("Pritisnite tipku za nastavak...");
             Console.ReadKey();
         }
 
         private async Task AddMaterialAsync(Course course)
         {
             Console.Clear();
-            Console.WriteLine($"=== Dodaj materijal za {course.Name} ===");
+            Console.WriteLine($"Dodaj materijal ({course.Name}) ");
 
             Console.Write("Naziv materijala: ");
             var name = Console.ReadLine();
@@ -176,16 +140,15 @@ namespace Moodle.Presentation.Menus
             try
             {
                 await _courseService.AddMaterialAsync(course.Id, name, url);
-                Console.WriteLine("Materijal uspješno dodan.");
+                Console.WriteLine("Materijal dodan.");
             }
             catch (ValidationException ex)
             {
-                Console.WriteLine("Greška prilikom dodavanja materijala:");
+                Console.WriteLine("Greška:");
                 foreach (var err in ex.Errors)
                     Console.WriteLine("- " + err.Message);
             }
 
-            Console.WriteLine("Pritisnite tipku za nastavak...");
             Console.ReadKey();
         }
     }
