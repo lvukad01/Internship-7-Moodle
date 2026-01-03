@@ -19,41 +19,35 @@ namespace Moodle.Application.UseCases.Statistics
             _messageRepository = messageRepository;
         }
 
-        public async Task<int> GetUserCountAsync(UserRole role)
+        public async Task<int> GetUserCountAsync(UserRole role, DateTime? from = null, DateTime? to = null)
         {
-            return role switch
-            {
-                UserRole.Student => (await _userRepository.GetAllStudentsAsync()).Count,
-                UserRole.Professor => (await _userRepository.GetAllProfessorsAsync()).Count,
-                UserRole.Admin => (await _userRepository.GetAllAdminsAsync()).Count,
-                _ => 0
-            };
+            return await _userRepository.CountByRoleAsync(role, from, to);
         }
 
-        public async Task<int> GetCourseCountAsync()
+        public async Task<int> GetCourseCountAsync(DateTime? from = null, DateTime? to = null)
         {
-            return await _courseRepository.CountAsync();
+            return await _courseRepository.CountAsync(from, to);
         }
 
-        public async Task<List<(string CourseName, int StudentCount)>> GetTopCoursesAsync(int top)
+        public async Task<List<(string CourseName, int StudentCount)>> GetTopCoursesAsync(int top, DateTime? from = null, DateTime? to = null)
         {
-            var courses = await _courseRepository.GetAllAsync();
+            var courses = await _courseRepository.GetAllAsync(from, to);
 
             return courses
-                .Select(c => (c.Name, c.Enrollments.Count))
-                .OrderByDescending(x => x.Item2)
+                .Select(c => (c.Name, StudentCount: c.Enrollments.Count))
+                .OrderByDescending(x => x.StudentCount)
                 .Take(top)
                 .ToList();
         }
 
-        public async Task<List<(string Email, int MessageCount)>> GetTopMessagersAsync(int top)
+        public async Task<List<(string Email, int MessageCount)>> GetTopMessagersAsync(int top, DateTime? from = null, DateTime? to = null)
         {
-            var messages = await _messageRepository.GetAllAsync();
+            var messages = await _messageRepository.GetAllAsync(from, to);
 
             return messages
                 .GroupBy(m => m.Sender.Email)
-                .Select(g => (g.Key, g.Count()))
-                .OrderByDescending(x => x.Item2)
+                .Select(g => (Email: g.Key, Count: g.Count()))
+                .OrderByDescending(x => x.Count)
                 .Take(top)
                 .ToList();
         }

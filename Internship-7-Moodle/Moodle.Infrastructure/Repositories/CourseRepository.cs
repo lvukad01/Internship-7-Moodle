@@ -66,10 +66,21 @@ namespace Moodle.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<int> CountAsync()
+        public async Task<int> CountAsync(DateTime? from = null, DateTime? to = null)
         {
-            return await _context.Courses.CountAsync();
+            var query = _context.Courses.AsQueryable();
+
+            if (from.HasValue)
+                query = query.Where(c => c.CreatedAt >= from.Value);
+            if (to.HasValue)
+                query = query.Where(c => c.CreatedAt <= to.Value);
+
+            return await query.CountAsync();
         }
 
+        public IQueryable<Course> Query()
+        {
+            return _context.Courses.AsQueryable();
+        }
     }
 }

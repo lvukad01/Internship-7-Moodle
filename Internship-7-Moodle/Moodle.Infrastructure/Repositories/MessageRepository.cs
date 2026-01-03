@@ -48,12 +48,18 @@ namespace Moodle.Infrastructure.Repositories
             _context.Messages.RemoveRange(messages);
             await _context.SaveChangesAsync();
         }
-        public async Task<List<Message>> GetAllAsync()
+        public async Task<List<Message>> GetAllAsync(DateTime? from = null, DateTime? to = null)
         {
-            return await _context.Messages
-                .Include(m => m.Sender)
-                .ToListAsync();
+            var query = _context.Messages.Include(m => m.Sender).AsQueryable();
+
+            if (from.HasValue)
+                query = query.Where(m => m.SentAt >= from.Value);
+            if (to.HasValue)
+                query = query.Where(m => m.SentAt <= to.Value);
+
+            return await query.ToListAsync();
         }
+
 
     }
 }

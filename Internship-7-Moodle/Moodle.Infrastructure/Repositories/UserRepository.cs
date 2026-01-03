@@ -73,9 +73,27 @@ namespace Moodle.Infrastructure.Repositories
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
         }
-        public async Task<int> CountByRoleAsync(UserRole role)
+        public async Task<int> CountByRoleAsync(UserRole role, DateTime? from = null, DateTime? to = null)
         {
-            return await _context.Users.CountAsync(u => u.Role == role);
+            var query = _context.Users.Where(u => u.Role == role);
+
+            if (from.HasValue)
+                query = query.Where(u => u.CreatedAt >= from.Value);
+            if (to.HasValue)
+                query = query.Where(u => u.CreatedAt <= to.Value);
+
+            return await query.CountAsync();
+        }
+        public async Task<List<User>> GetAllAsync(DateTime? from = null, DateTime? to = null)
+        {
+            var query = _context.Users.AsQueryable();
+
+            if (from.HasValue)
+                query = query.Where(u => u.CreatedAt >= from.Value);
+            if (to.HasValue)
+                query = query.Where(u => u.CreatedAt <= to.Value);
+
+            return await query.ToListAsync();
         }
 
 

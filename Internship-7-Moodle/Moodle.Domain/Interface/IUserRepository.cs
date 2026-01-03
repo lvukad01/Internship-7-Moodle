@@ -17,7 +17,7 @@ namespace Moodle.Domain.Persistence // Definiramo metode koje cemo u infrastruct
         Task AddAsync(User user);
         Task UpdateAsync(User user);
         Task DeleteAsync(User user);
-        Task<int> CountByRoleAsync(UserRole role);
+        Task<int> CountByRoleAsync(UserRole role, DateTime? from = null, DateTime? to = null);
 
     }
 }

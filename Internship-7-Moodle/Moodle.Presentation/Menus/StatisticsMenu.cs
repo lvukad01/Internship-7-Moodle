@@ -51,19 +51,38 @@ namespace Moodle.Presentation.Menus
             }
         }
 
+        private (DateTime? from, DateTime? to) ChooseTimeRange()
+        {
+            Console.WriteLine("Odaberite vremenski raspon:");
+            Console.WriteLine("1. Danas");
+            Console.WriteLine("2. Ovaj mjesec");
+            Console.WriteLine("3. Ukupno");
+            Console.Write("Odabir: ");
+
+            var choice = Console.ReadLine();
+            DateTime now = DateTime.UtcNow;
+
+            return choice switch
+            {
+                "1" => (now.Date, now.Date.AddDays(1).AddTicks(-1)),
+                "2" => (new DateTime(now.Year, now.Month, 1), new DateTime(now.Year, now.Month, 1).AddMonths(1).AddTicks(-1)),
+                _ => (null, null)
+            };
+        }
+
         private async Task ShowUserCountsAsync()
         {
             Console.Clear();
             Console.WriteLine("=== Broj korisnika po rolama ===");
+            var (from, to) = ChooseTimeRange();
 
-            var students = await _statisticsService.GetUserCountAsync(UserRole.Student);
-            var professors = await _statisticsService.GetUserCountAsync(UserRole.Professor);
-            var admins = await _statisticsService.GetUserCountAsync(UserRole.Admin);
+            var students = await _statisticsService.GetUserCountAsync(UserRole.Student, from, to);
+            var professors = await _statisticsService.GetUserCountAsync(UserRole.Professor, from, to);
+            var admins = await _statisticsService.GetUserCountAsync(UserRole.Admin, from, to);
 
             Console.WriteLine($"Studenti  : {students}");
             Console.WriteLine($"Profesori : {professors}");
             Console.WriteLine($"Admini    : {admins}");
-
             Console.WriteLine("\nPritisnite tipku za nastavak...");
             Console.ReadKey();
         }
@@ -72,10 +91,10 @@ namespace Moodle.Presentation.Menus
         {
             Console.Clear();
             Console.WriteLine("=== Broj kolegija ===");
+            var (from, to) = ChooseTimeRange();
 
-            var count = await _statisticsService.GetCourseCountAsync();
+            var count = await _statisticsService.GetCourseCountAsync(from, to);
             Console.WriteLine($"Ukupno kolegija: {count}");
-
             Console.WriteLine("\nPritisnite tipku za nastavak...");
             Console.ReadKey();
         }
@@ -84,13 +103,10 @@ namespace Moodle.Presentation.Menus
         {
             Console.Clear();
             Console.WriteLine("=== Top 3 kolegija po broju studenata ===");
+            var (from, to) = ChooseTimeRange();
 
-            var courses = await _statisticsService.GetTopCoursesAsync(3);
-
-            if (!courses.Any())
-            {
-                Console.WriteLine("Nema podataka.");
-            }
+            var courses = await _statisticsService.GetTopCoursesAsync(3, from, to);
+            if (!courses.Any()) Console.WriteLine("Nema podataka.");
             else
             {
                 int rank = 1;
@@ -100,7 +116,6 @@ namespace Moodle.Presentation.Menus
                     rank++;
                 }
             }
-
             Console.WriteLine("\nPritisnite tipku za nastavak...");
             Console.ReadKey();
         }
@@ -109,13 +124,10 @@ namespace Moodle.Presentation.Menus
         {
             Console.Clear();
             Console.WriteLine("=== Top 3 korisnika po broju poruka ===");
+            var (from, to) = ChooseTimeRange();
 
-            var users = await _statisticsService.GetTopMessagersAsync(3);
-
-            if (!users.Any())
-            {
-                Console.WriteLine("Nema poruka.");
-            }
+            var users = await _statisticsService.GetTopMessagersAsync(3, from, to);
+            if (!users.Any()) Console.WriteLine("Nema poruka.");
             else
             {
                 int rank = 1;
@@ -125,7 +137,6 @@ namespace Moodle.Presentation.Menus
                     rank++;
                 }
             }
-
             Console.WriteLine("\nPritisnite tipku za nastavak...");
             Console.ReadKey();
         }
