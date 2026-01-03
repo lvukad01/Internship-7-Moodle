@@ -128,15 +128,22 @@ namespace Moodle.Presentation.Menus
             {
                 Console.WriteLine($"{i + 1}. {users[i].Email} ({users[i].Role})");
             }
+            Console.WriteLine("0. Izlaz");
+
 
             Console.Write("Odaberi razgovor: ");
-            if (!int.TryParse(Console.ReadLine(), out int index) || index < 1 || index > users.Count)
+            if (!int.TryParse(Console.ReadLine(), out int index) || index < 0 || index > users.Count)
             {
                 Console.WriteLine("Nevažeći odabir.");
                 Console.ReadKey();
                 return;
             }
-
+            else if (index == 0)
+            {
+                Console.WriteLine("Izlaz...");
+                Console.ReadKey();
+                return;
+            }
             var chatUser = users[index - 1];
             await ShowChatAsync(chatUser.Id, chatUser.Email);
         }
