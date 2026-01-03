@@ -4,6 +4,7 @@ using Moodle.Application.UseCases.Courses;
 using Moodle.Application.UseCases.Messages;
 using Moodle.Application.UseCases.Statistics;
 using Moodle.Application.UseCases.Users;
+using Moodle.Presentation.Common;
 
 namespace Moodle.Presentation.Menus
 {
@@ -28,28 +29,34 @@ namespace Moodle.Presentation.Menus
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine("=== Moodle ===");
-                Console.WriteLine("1. Login");
-                Console.WriteLine("2. Registracija");
-                Console.WriteLine("0. Exit");
-                Console.Write("Odabir: ");
-                var choice = Console.ReadLine();
 
-                switch (choice)
+                var options = new List<string>
                 {
-                    case "1":
-                        await LoginAsync();
-                        break;
-                    case "2":
-                        await RegisterAsync();
-                        break;
-                    case "0":
-                        Console.WriteLine("Izlaz iz aplikacije. Doviđenja!");
-                        return;
-                    default:
-                        Console.WriteLine("Nepoznata opcija.");
-                        Console.ReadKey();
-                        break;
+                    "Login",
+                    "Registracija",
+                    "Exit"
+                };
+                while (true)
+                {
+                    int choice = MenuNavigator.Show("GLAVNI MENU", options);
+
+
+                    switch (choice)
+                    {
+                        case 0:
+                            await LoginAsync();
+                            break;
+                        case 1:
+                            await RegisterAsync();
+                            break;
+                        case 2:
+                            Console.WriteLine("Izlaz iz aplikacije. Doviđenja!");
+                            return;
+                        default:
+                            Console.WriteLine("Nepoznata opcija.");
+                            Console.ReadKey();
+                            break;
+                    }
                 }
             }
         }
@@ -57,9 +64,15 @@ namespace Moodle.Presentation.Menus
         private async Task LoginAsync()
         {
             Console.Clear();
-            Console.WriteLine("=== Login ===");
-            Console.Write("Email: ");
+            Console.WriteLine("LOGIN");
+            Console.Write("Email (za izlaz unesite /exit): ");
             var email = Console.ReadLine();
+            if (email == "/exit")
+            {
+                Console.WriteLine("Izlaz");
+                Console.ReadKey();
+                return;
+            }
             Console.Write("Password: ");
             var password = Console.ReadLine();
 
@@ -87,9 +100,15 @@ namespace Moodle.Presentation.Menus
         private async Task RegisterAsync()
         {
             Console.Clear();
-            Console.WriteLine("=== Registracija ===");
-            Console.Write("Email: ");
+            Console.WriteLine("REGISTRACIJA ");
+            Console.Write("Email (za izlaz unesite /exit): ");
             var email = Console.ReadLine();
+            if (email == "/exit")
+            {
+                Console.WriteLine("Izlaz");
+                Console.ReadKey();
+                return;
+            }
             Console.Write("Nova lozinka: ");
             var password = Console.ReadLine();
             Console.Write("Potvrda lozinke: ");

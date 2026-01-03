@@ -2,6 +2,7 @@
 using Moodle.Application.UseCases.Users;
 using Moodle.Domain.Enums;
 using Moodle.Application.Exceptions;
+using Moodle.Presentation.Common;
 
 namespace Moodle.Presentation.Menus
 {
@@ -22,68 +23,50 @@ namespace Moodle.Presentation.Menus
         {
             while (true)
             {
-                Console.Clear();
-                Console.WriteLine("=== Privatni chat ===");
-                Console.WriteLine("1. Nova poruka");
-                Console.WriteLine("2. Moji razgovori");
-                Console.WriteLine("0. Nazad");
-                Console.Write("Odabir: ");
-                var choice = Console.ReadLine();
+                var choice = MenuNavigator.Show(
+                    "PRIVATNI CHAT",
+                    new List<string>
+                    {
+                        "Nova poruka",
+                        "Moji razgovori",
+                        "Nazad"
+                    });
 
-                switch (choice)
-                {
-                    case "1":
-                        await NewMessageAsync();
-                        break;
-                    case "2":
-                        await ShowConversationsAsync();
-                        break;
-                    case "0":
-                        return;
-                    default:
-                        Console.WriteLine("Nepoznata opcija.");
-                        Console.ReadKey();
-                        break;
-                }
+                if (choice == -1 || choice == 2)
+                    return;
+
+                if (choice == 0)
+                    await NewMessageAsync();
+
+                if (choice == 1)
+                    await ShowConversationsAsync();
             }
         }
 
         private async Task NewMessageAsync()
         {
-            Console.Clear();
-            Console.WriteLine("=== Nova poruka ===");
-
-            var allUsers = await _userService.GetUsersByRoleAsync(UserRole.Student);
-            allUsers.AddRange(await _userService.GetUsersByRoleAsync(UserRole.Professor));
-            allUsers.RemoveAll(u => u.Id == _currentUserId);
-            if (!allUsers.Any())
+            var users = await GetAllChatUsersAsync();
+            if (!users.Any())
             {
                 Console.WriteLine("Nema korisnika za slanje poruke.");
                 Console.ReadKey();
                 return;
             }
 
-            for (int i = 0; i < allUsers.Count; i++)
-            {
-                Console.WriteLine($"{i + 1}. {allUsers[i].Email} ({allUsers[i].Role})");
-            }
+            var options = users
+                .Select(u => $"{u.Email} ({u.Role})")
+                .Append("Nazad")
+                .ToList();
 
-            Console.WriteLine("0. Izlaz");
+            var choice = MenuNavigator.Show("NOVA PORUKA", options);
 
-            Console.Write("Odaberi korisnika: ");
-            if (!int.TryParse(Console.ReadLine(), out int index) || index < 0 || index > allUsers.Count)
-            {
-                Console.WriteLine("Nevažeći odabir.");
-                Console.ReadKey();
+            if (choice == -1 || choice == users.Count)
                 return;
-            }
-            else if (index == 0)
-            {
-                Console.WriteLine("Izlaz...");
-                Console.ReadKey();
-                return;
-            }
-                var receiver = allUsers[index - 1];
+
+            var receiver = users[choice];
+
+            Console.Clear();
+            Console.WriteLine($"Poruka za: {receiver.Email}");
             Console.Write("Unesi poruku: ");
             var content = Console.ReadLine();
 
@@ -94,7 +77,7 @@ namespace Moodle.Presentation.Menus
             }
             catch (ValidationException ex)
             {
-                Console.WriteLine("Neuspjeh pri slanju poruke:");
+                Console.WriteLine("Greška:");
                 foreach (var err in ex.Errors)
                     Console.WriteLine("- " + err.Message);
             }
@@ -104,9 +87,6 @@ namespace Moodle.Presentation.Menus
 
         private async Task ShowConversationsAsync()
         {
-            Console.Clear();
-            Console.WriteLine("=== Moji razgovori ===");
-
             var conversationUserIds = await _messageService.GetConversationUserIdsAsync(_currentUserId);
             if (!conversationUserIds.Any())
             {
@@ -115,37 +95,23 @@ namespace Moodle.Presentation.Menus
                 return;
             }
 
-            var users = new List<User>();
-            foreach (var id in conversationUserIds)
-            {
-                var user = await _userService.GetUsersByRoleAsync(UserRole.Student);
-                user.AddRange(await _userService.GetUsersByRoleAsync(UserRole.Professor));
-                var u = user.FirstOrDefault(x => x.Id == id);
-                if (u != null) users.Add(u);
-            }
+            var users = await GetAllChatUsersAsync();
+            var chatUsers = users
+                .Where(u => conversationUserIds.Contains(u.Id))
+                .ToList();
 
-            for (int i = 0; i < users.Count; i++)
-            {
-                Console.WriteLine($"{i + 1}. {users[i].Email} ({users[i].Role})");
-            }
-            Console.WriteLine("0. Izlaz");
+            var options = chatUsers
+                .Select(u => $"{u.Email} ({u.Role})")
+                .Append("Nazad")
+                .ToList();
 
+            var choice = MenuNavigator.Show(" MOJI RAZGOVORI", options);
 
-            Console.Write("Odaberi razgovor: ");
-            if (!int.TryParse(Console.ReadLine(), out int index) || index < 0 || index > users.Count)
-            {
-                Console.WriteLine("Nevažeći odabir.");
-                Console.ReadKey();
+            if (choice == -1 || choice == chatUsers.Count)
                 return;
-            }
-            else if (index == 0)
-            {
-                Console.WriteLine("Izlaz...");
-                Console.ReadKey();
-                return;
-            }
-            var chatUser = users[index - 1];
-            await ShowChatAsync(chatUser.Id, chatUser.Email);
+
+            var user = chatUsers[choice];
+            await ShowChatAsync(user.Id, user.Email);
         }
 
         private async Task ShowChatAsync(int otherUserId, string otherUserEmail)
@@ -153,8 +119,9 @@ namespace Moodle.Presentation.Menus
             while (true)
             {
                 Console.Clear();
+                Console.WriteLine($" Chat s {otherUserEmail}\n");
+
                 var messages = await _messageService.GetConversationAsync(_currentUserId, otherUserId);
-                Console.WriteLine($"=== Chat s {otherUserEmail} ===");
                 foreach (var msg in messages)
                 {
                     var sender = msg.SenderId == _currentUserId ? "Ja" : otherUserEmail;
@@ -163,7 +130,9 @@ namespace Moodle.Presentation.Menus
 
                 Console.WriteLine("\nUpiši poruku (/exit za povratak):");
                 var input = Console.ReadLine();
-                if (input.Trim().ToLower() == "/exit") break;
+
+                if (input?.Trim().ToLower() == "/exit")
+                    return;
 
                 try
                 {
@@ -171,12 +140,23 @@ namespace Moodle.Presentation.Menus
                 }
                 catch (ValidationException ex)
                 {
-                    Console.WriteLine("Neuspjeh pri slanju poruke:");
+                    Console.WriteLine("Greška:");
                     foreach (var err in ex.Errors)
                         Console.WriteLine("- " + err.Message);
                     Console.ReadKey();
                 }
             }
+        }
+
+        private async Task<List<User>> GetAllChatUsersAsync()
+        {
+            var users = await _userService.GetUsersByRoleAsync(UserRole.Student);
+            users.AddRange(await _userService.GetUsersByRoleAsync(UserRole.Professor));
+            users.AddRange(await _userService.GetUsersByRoleAsync(UserRole.Admin));
+
+            return users
+                .Where(u => u.Id != _currentUserId)
+                .ToList();
         }
     }
 }
