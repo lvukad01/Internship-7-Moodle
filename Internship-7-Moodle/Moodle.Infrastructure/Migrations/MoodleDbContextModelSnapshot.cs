@@ -62,7 +62,7 @@ namespace Moodle.Infrastructure.Migrations
                             Id = 1,
                             Content = "Dobrodošli na Programiranje 1!",
                             CourseId = 1,
-                            CreatedAt = new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2590),
+                            CreatedAt = new DateTime(2025, 12, 7, 12, 0, 0, 0, DateTimeKind.Utc),
                             ProfessorId = 2,
                             Title = "Dobrodošli"
                         },
@@ -71,18 +71,54 @@ namespace Moodle.Infrastructure.Migrations
                             Id = 2,
                             Content = "Prvi kolokvij održat će se sljedeći tjedan.",
                             CourseId = 2,
-                            CreatedAt = new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2592),
+                            CreatedAt = new DateTime(2025, 12, 8, 12, 0, 0, 0, DateTimeKind.Utc),
                             ProfessorId = 2,
                             Title = "Prvi kolokvij"
                         },
                         new
                         {
                             Id = 3,
-                            Content = "Dodana je nova literatura.",
+                            Content = "Dodana nova literatura za kolegij.",
                             CourseId = 3,
-                            CreatedAt = new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2594),
+                            CreatedAt = new DateTime(2025, 12, 9, 12, 0, 0, 0, DateTimeKind.Utc),
                             ProfessorId = 3,
                             Title = "Literatura"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Content = "Predavanje iz Web programiranja pomaknuto za utorak.",
+                            CourseId = 4,
+                            CreatedAt = new DateTime(2025, 12, 10, 12, 0, 0, 0, DateTimeKind.Utc),
+                            ProfessorId = 3,
+                            Title = "Predavanje"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Content = "Novi sadržaj za Napredno C#.",
+                            CourseId = 5,
+                            CreatedAt = new DateTime(2025, 12, 22, 12, 0, 0, 0, DateTimeKind.Utc),
+                            ProfessorId = 10,
+                            Title = "Napredno predavanje"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Content = "Prvo predavanje iz Data Science.",
+                            CourseId = 6,
+                            CreatedAt = new DateTime(2025, 12, 27, 12, 0, 0, 0, DateTimeKind.Utc),
+                            ProfessorId = 13,
+                            Title = "Data Science Intro"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Content = "Priprema za Machine Learning kolokvij.",
+                            CourseId = 7,
+                            CreatedAt = new DateTime(2025, 12, 29, 12, 0, 0, 0, DateTimeKind.Utc),
+                            ProfessorId = 13,
+                            Title = "ML Kolokvij"
                         });
                 });
 
@@ -93,6 +129,9 @@ namespace Moodle.Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -112,20 +151,51 @@ namespace Moodle.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
+                            CreatedAt = new DateTime(2025, 12, 4, 12, 0, 0, 0, DateTimeKind.Utc),
                             Name = "Programiranje 1",
                             ProfessorId = 2
                         },
                         new
                         {
                             Id = 2,
+                            CreatedAt = new DateTime(2025, 12, 5, 12, 0, 0, 0, DateTimeKind.Utc),
                             Name = "Objektno programiranje",
                             ProfessorId = 2
                         },
                         new
                         {
                             Id = 3,
+                            CreatedAt = new DateTime(2025, 12, 6, 12, 0, 0, 0, DateTimeKind.Utc),
                             Name = "Baze podataka",
                             ProfessorId = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedAt = new DateTime(2025, 12, 7, 12, 0, 0, 0, DateTimeKind.Utc),
+                            Name = "Web programiranje",
+                            ProfessorId = 3
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CreatedAt = new DateTime(2026, 1, 1, 12, 0, 0, 0, DateTimeKind.Utc),
+                            Name = "Napredno C#",
+                            ProfessorId = 10
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CreatedAt = new DateTime(2025, 12, 27, 12, 0, 0, 0, DateTimeKind.Utc),
+                            Name = "Data Science",
+                            ProfessorId = 13
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CreatedAt = new DateTime(2025, 12, 29, 12, 0, 0, 0, DateTimeKind.Utc),
+                            Name = "Machine Learning",
+                            ProfessorId = 13
                         });
                 });
 
@@ -151,25 +221,61 @@ namespace Moodle.Infrastructure.Migrations
                         {
                             UserId = 4,
                             CourseId = 1,
-                            EnrolledAt = new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2564)
+                            EnrolledAt = new DateTime(2025, 12, 7, 12, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             UserId = 5,
                             CourseId = 1,
-                            EnrolledAt = new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2566)
+                            EnrolledAt = new DateTime(2025, 12, 8, 12, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             UserId = 6,
                             CourseId = 2,
-                            EnrolledAt = new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2568)
+                            EnrolledAt = new DateTime(2025, 12, 9, 12, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             UserId = 4,
                             CourseId = 3,
-                            EnrolledAt = new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2569)
+                            EnrolledAt = new DateTime(2026, 1, 1, 12, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            UserId = 7,
+                            CourseId = 4,
+                            EnrolledAt = new DateTime(2025, 12, 10, 12, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            UserId = 8,
+                            CourseId = 2,
+                            EnrolledAt = new DateTime(2026, 1, 1, 12, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            UserId = 9,
+                            CourseId = 5,
+                            EnrolledAt = new DateTime(2025, 12, 22, 12, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            UserId = 11,
+                            CourseId = 6,
+                            EnrolledAt = new DateTime(2025, 12, 31, 12, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            UserId = 12,
+                            CourseId = 6,
+                            EnrolledAt = new DateTime(2025, 12, 30, 12, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            UserId = 11,
+                            CourseId = 7,
+                            EnrolledAt = new DateTime(2025, 12, 31, 12, 0, 0, 0, DateTimeKind.Utc)
                         });
                 });
 
@@ -211,7 +317,7 @@ namespace Moodle.Infrastructure.Migrations
                         {
                             Id = 1,
                             CourseId = 1,
-                            CreatedAt = new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2610),
+                            CreatedAt = new DateTime(2025, 12, 7, 12, 0, 0, 0, DateTimeKind.Utc),
                             Name = "Uvod u C#",
                             ProfessorId = 2,
                             Url = "https://example.com/csharp"
@@ -220,7 +326,7 @@ namespace Moodle.Infrastructure.Migrations
                         {
                             Id = 2,
                             CourseId = 2,
-                            CreatedAt = new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2612),
+                            CreatedAt = new DateTime(2025, 12, 8, 12, 0, 0, 0, DateTimeKind.Utc),
                             Name = "OOP principi",
                             ProfessorId = 2,
                             Url = "https://example.com/oop"
@@ -229,10 +335,55 @@ namespace Moodle.Infrastructure.Migrations
                         {
                             Id = 3,
                             CourseId = 3,
-                            CreatedAt = new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2614),
+                            CreatedAt = new DateTime(2025, 12, 9, 12, 0, 0, 0, DateTimeKind.Utc),
                             Name = "SQL osnove",
                             ProfessorId = 3,
                             Url = "https://example.com/sql"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CourseId = 4,
+                            CreatedAt = new DateTime(2025, 12, 10, 12, 0, 0, 0, DateTimeKind.Utc),
+                            Name = "HTML & CSS",
+                            ProfessorId = 3,
+                            Url = "https://example.com/html-css"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CourseId = 2,
+                            CreatedAt = new DateTime(2025, 12, 12, 12, 0, 0, 0, DateTimeKind.Utc),
+                            Name = "LINQ u C#",
+                            ProfessorId = 2,
+                            Url = "https://example.com/linq"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CourseId = 5,
+                            CreatedAt = new DateTime(2025, 12, 22, 12, 0, 0, 0, DateTimeKind.Utc),
+                            Name = "Napredni LINQ",
+                            ProfessorId = 10,
+                            Url = "https://example.com/linq-advanced"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CourseId = 6,
+                            CreatedAt = new DateTime(2025, 12, 27, 12, 0, 0, 0, DateTimeKind.Utc),
+                            Name = "Python Basics",
+                            ProfessorId = 13,
+                            Url = "https://example.com/python"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            CourseId = 7,
+                            CreatedAt = new DateTime(2025, 12, 29, 12, 0, 0, 0, DateTimeKind.Utc),
+                            Name = "ML Algorithms",
+                            ProfessorId = 13,
+                            Url = "https://example.com/ml"
                         });
                 });
 
@@ -272,7 +423,7 @@ namespace Moodle.Infrastructure.Migrations
                             Content = "Dobrodošao na kolegij!",
                             ReceiverId = 4,
                             SenderId = 2,
-                            SentAt = new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2644)
+                            SentAt = new DateTime(2025, 12, 7, 12, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
@@ -280,7 +431,7 @@ namespace Moodle.Infrastructure.Migrations
                             Content = "Hvala!",
                             ReceiverId = 2,
                             SenderId = 4,
-                            SentAt = new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2646)
+                            SentAt = new DateTime(2025, 12, 7, 12, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
@@ -288,7 +439,55 @@ namespace Moodle.Infrastructure.Migrations
                             Content = "Jesi li riješio zadatak?",
                             ReceiverId = 6,
                             SenderId = 5,
-                            SentAt = new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2648)
+                            SentAt = new DateTime(2025, 12, 8, 12, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Content = "Molim te pošalji zadaću.",
+                            ReceiverId = 7,
+                            SenderId = 3,
+                            SentAt = new DateTime(2025, 12, 10, 12, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Content = "Poslao sam svoj projekt.",
+                            ReceiverId = 3,
+                            SenderId = 8,
+                            SentAt = new DateTime(2026, 1, 1, 12, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Content = "Pozdrav profesore!",
+                            ReceiverId = 10,
+                            SenderId = 9,
+                            SentAt = new DateTime(2025, 12, 22, 12, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Content = "Dobrodošao!",
+                            ReceiverId = 9,
+                            SenderId = 10,
+                            SentAt = new DateTime(2025, 12, 22, 12, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Content = "Pozdrav profesore!",
+                            ReceiverId = 13,
+                            SenderId = 11,
+                            SentAt = new DateTime(2025, 12, 31, 12, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Content = "Pošaljem zadatak danas.",
+                            ReceiverId = 13,
+                            SenderId = 12,
+                            SentAt = new DateTime(2025, 12, 30, 12, 0, 0, 0, DateTimeKind.Utc)
                         });
                 });
 
@@ -299,6 +498,9 @@ namespace Moodle.Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -323,6 +525,7 @@ namespace Moodle.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
+                            CreatedAt = new DateTime(2025, 12, 2, 12, 0, 0, 0, DateTimeKind.Utc),
                             Email = "admin@moodle.com",
                             Password = "admin123",
                             Role = 2
@@ -330,20 +533,23 @@ namespace Moodle.Infrastructure.Migrations
                         new
                         {
                             Id = 2,
-                            Email = "lanavukadin@moodle.com",
+                            CreatedAt = new DateTime(2025, 12, 4, 12, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "prof1@moodle.com",
                             Password = "prof123",
                             Role = 1
                         },
                         new
                         {
                             Id = 3,
-                            Email = "prof2@moodle.com",
+                            CreatedAt = new DateTime(2025, 12, 4, 12, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "lanavukadin@moodle.com",
                             Password = "prof123",
                             Role = 1
                         },
                         new
                         {
                             Id = 4,
+                            CreatedAt = new DateTime(2025, 12, 7, 12, 0, 0, 0, DateTimeKind.Utc),
                             Email = "student1@moodle.com",
                             Password = "student123",
                             Role = 0
@@ -351,6 +557,7 @@ namespace Moodle.Infrastructure.Migrations
                         new
                         {
                             Id = 5,
+                            CreatedAt = new DateTime(2025, 12, 8, 12, 0, 0, 0, DateTimeKind.Utc),
                             Email = "student2@moodle.com",
                             Password = "student123",
                             Role = 0
@@ -358,9 +565,66 @@ namespace Moodle.Infrastructure.Migrations
                         new
                         {
                             Id = 6,
+                            CreatedAt = new DateTime(2025, 12, 9, 12, 0, 0, 0, DateTimeKind.Utc),
                             Email = "student3@moodle.com",
                             Password = "student123",
                             Role = 0
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CreatedAt = new DateTime(2025, 12, 10, 12, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "student4@moodle.com",
+                            Password = "student123",
+                            Role = 0
+                        },
+                        new
+                        {
+                            Id = 8,
+                            CreatedAt = new DateTime(2026, 1, 1, 12, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "student5@moodle.com",
+                            Password = "student123",
+                            Role = 0
+                        },
+                        new
+                        {
+                            Id = 9,
+                            CreatedAt = new DateTime(2025, 12, 22, 12, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "student6@moodle.com",
+                            Password = "student123",
+                            Role = 0
+                        },
+                        new
+                        {
+                            Id = 10,
+                            CreatedAt = new DateTime(2026, 1, 1, 12, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "prof3@moodle.com",
+                            Password = "prof123",
+                            Role = 1
+                        },
+                        new
+                        {
+                            Id = 11,
+                            CreatedAt = new DateTime(2025, 12, 31, 12, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "student7@moodle.com",
+                            Password = "student123",
+                            Role = 0
+                        },
+                        new
+                        {
+                            Id = 12,
+                            CreatedAt = new DateTime(2025, 12, 30, 12, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "student8@moodle.com",
+                            Password = "student123",
+                            Role = 0
+                        },
+                        new
+                        {
+                            Id = 13,
+                            CreatedAt = new DateTime(2025, 12, 27, 12, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "prof4@moodle.com",
+                            Password = "prof123",
+                            Role = 1
                         });
                 });
 

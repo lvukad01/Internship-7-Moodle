@@ -26,7 +26,8 @@ namespace Moodle.Infrastructure.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Email = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     Password = table.Column<string>(type: "text", nullable: false),
-                    Role = table.Column<int>(type: "integer", nullable: false)
+                    Role = table.Column<int>(type: "integer", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -41,6 +42,7 @@ namespace Moodle.Infrastructure.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ProfessorId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -181,26 +183,37 @@ namespace Moodle.Infrastructure.Migrations
             migrationBuilder.InsertData(
                 schema: "public",
                 table: "Users",
-                columns: new[] { "Id", "Email", "Password", "Role" },
+                columns: new[] { "Id", "CreatedAt", "Email", "Password", "Role" },
                 values: new object[,]
                 {
-                    { 1, "admin@moodle.com", "admin123", 2 },
-                    { 2, "lanavukadin@moodle.com", "prof123", 1 },
-                    { 3, "prof2@moodle.com", "prof123", 1 },
-                    { 4, "student1@moodle.com", "student123", 0 },
-                    { 5, "student2@moodle.com", "student123", 0 },
-                    { 6, "student3@moodle.com", "student123", 0 }
+                    { 1, new DateTime(2025, 12, 2, 12, 0, 0, 0, DateTimeKind.Utc), "admin@moodle.com", "admin123", 2 },
+                    { 2, new DateTime(2025, 12, 4, 12, 0, 0, 0, DateTimeKind.Utc), "prof1@moodle.com", "prof123", 1 },
+                    { 3, new DateTime(2025, 12, 4, 12, 0, 0, 0, DateTimeKind.Utc), "lanavukadin@moodle.com", "prof123", 1 },
+                    { 4, new DateTime(2025, 12, 7, 12, 0, 0, 0, DateTimeKind.Utc), "student1@moodle.com", "student123", 0 },
+                    { 5, new DateTime(2025, 12, 8, 12, 0, 0, 0, DateTimeKind.Utc), "student2@moodle.com", "student123", 0 },
+                    { 6, new DateTime(2025, 12, 9, 12, 0, 0, 0, DateTimeKind.Utc), "student3@moodle.com", "student123", 0 },
+                    { 7, new DateTime(2025, 12, 10, 12, 0, 0, 0, DateTimeKind.Utc), "student4@moodle.com", "student123", 0 },
+                    { 8, new DateTime(2026, 1, 1, 12, 0, 0, 0, DateTimeKind.Utc), "student5@moodle.com", "student123", 0 },
+                    { 9, new DateTime(2025, 12, 22, 12, 0, 0, 0, DateTimeKind.Utc), "student6@moodle.com", "student123", 0 },
+                    { 10, new DateTime(2026, 1, 1, 12, 0, 0, 0, DateTimeKind.Utc), "prof3@moodle.com", "prof123", 1 },
+                    { 11, new DateTime(2025, 12, 31, 12, 0, 0, 0, DateTimeKind.Utc), "student7@moodle.com", "student123", 0 },
+                    { 12, new DateTime(2025, 12, 30, 12, 0, 0, 0, DateTimeKind.Utc), "student8@moodle.com", "student123", 0 },
+                    { 13, new DateTime(2025, 12, 27, 12, 0, 0, 0, DateTimeKind.Utc), "prof4@moodle.com", "prof123", 1 }
                 });
 
             migrationBuilder.InsertData(
                 schema: "public",
                 table: "Courses",
-                columns: new[] { "Id", "Name", "ProfessorId" },
+                columns: new[] { "Id", "CreatedAt", "Name", "ProfessorId" },
                 values: new object[,]
                 {
-                    { 1, "Programiranje 1", 2 },
-                    { 2, "Objektno programiranje", 2 },
-                    { 3, "Baze podataka", 3 }
+                    { 1, new DateTime(2025, 12, 4, 12, 0, 0, 0, DateTimeKind.Utc), "Programiranje 1", 2 },
+                    { 2, new DateTime(2025, 12, 5, 12, 0, 0, 0, DateTimeKind.Utc), "Objektno programiranje", 2 },
+                    { 3, new DateTime(2025, 12, 6, 12, 0, 0, 0, DateTimeKind.Utc), "Baze podataka", 3 },
+                    { 4, new DateTime(2025, 12, 7, 12, 0, 0, 0, DateTimeKind.Utc), "Web programiranje", 3 },
+                    { 5, new DateTime(2026, 1, 1, 12, 0, 0, 0, DateTimeKind.Utc), "Napredno C#", 10 },
+                    { 6, new DateTime(2025, 12, 27, 12, 0, 0, 0, DateTimeKind.Utc), "Data Science", 13 },
+                    { 7, new DateTime(2025, 12, 29, 12, 0, 0, 0, DateTimeKind.Utc), "Machine Learning", 13 }
                 });
 
             migrationBuilder.InsertData(
@@ -209,9 +222,15 @@ namespace Moodle.Infrastructure.Migrations
                 columns: new[] { "Id", "Content", "ReceiverId", "SenderId", "SentAt" },
                 values: new object[,]
                 {
-                    { 1, "Dobrodošao na kolegij!", 4, 2, new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2644) },
-                    { 2, "Hvala!", 2, 4, new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2646) },
-                    { 3, "Jesi li riješio zadatak?", 6, 5, new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2648) }
+                    { 1, "Dobrodošao na kolegij!", 4, 2, new DateTime(2025, 12, 7, 12, 0, 0, 0, DateTimeKind.Utc) },
+                    { 2, "Hvala!", 2, 4, new DateTime(2025, 12, 7, 12, 0, 0, 0, DateTimeKind.Utc) },
+                    { 3, "Jesi li riješio zadatak?", 6, 5, new DateTime(2025, 12, 8, 12, 0, 0, 0, DateTimeKind.Utc) },
+                    { 4, "Molim te pošalji zadaću.", 7, 3, new DateTime(2025, 12, 10, 12, 0, 0, 0, DateTimeKind.Utc) },
+                    { 5, "Poslao sam svoj projekt.", 3, 8, new DateTime(2026, 1, 1, 12, 0, 0, 0, DateTimeKind.Utc) },
+                    { 6, "Pozdrav profesore!", 10, 9, new DateTime(2025, 12, 22, 12, 0, 0, 0, DateTimeKind.Utc) },
+                    { 7, "Dobrodošao!", 9, 10, new DateTime(2025, 12, 22, 12, 0, 0, 0, DateTimeKind.Utc) },
+                    { 8, "Pozdrav profesore!", 13, 11, new DateTime(2025, 12, 31, 12, 0, 0, 0, DateTimeKind.Utc) },
+                    { 9, "Pošaljem zadatak danas.", 13, 12, new DateTime(2025, 12, 30, 12, 0, 0, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.InsertData(
@@ -220,9 +239,13 @@ namespace Moodle.Infrastructure.Migrations
                 columns: new[] { "Id", "Content", "CourseId", "CreatedAt", "ProfessorId", "Title" },
                 values: new object[,]
                 {
-                    { 1, "Dobrodošli na Programiranje 1!", 1, new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2590), 2, "Dobrodošli" },
-                    { 2, "Prvi kolokvij održat će se sljedeći tjedan.", 2, new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2592), 2, "Prvi kolokvij" },
-                    { 3, "Dodana je nova literatura.", 3, new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2594), 3, "Literatura" }
+                    { 1, "Dobrodošli na Programiranje 1!", 1, new DateTime(2025, 12, 7, 12, 0, 0, 0, DateTimeKind.Utc), 2, "Dobrodošli" },
+                    { 2, "Prvi kolokvij održat će se sljedeći tjedan.", 2, new DateTime(2025, 12, 8, 12, 0, 0, 0, DateTimeKind.Utc), 2, "Prvi kolokvij" },
+                    { 3, "Dodana nova literatura za kolegij.", 3, new DateTime(2025, 12, 9, 12, 0, 0, 0, DateTimeKind.Utc), 3, "Literatura" },
+                    { 4, "Predavanje iz Web programiranja pomaknuto za utorak.", 4, new DateTime(2025, 12, 10, 12, 0, 0, 0, DateTimeKind.Utc), 3, "Predavanje" },
+                    { 5, "Novi sadržaj za Napredno C#.", 5, new DateTime(2025, 12, 22, 12, 0, 0, 0, DateTimeKind.Utc), 10, "Napredno predavanje" },
+                    { 6, "Prvo predavanje iz Data Science.", 6, new DateTime(2025, 12, 27, 12, 0, 0, 0, DateTimeKind.Utc), 13, "Data Science Intro" },
+                    { 7, "Priprema za Machine Learning kolokvij.", 7, new DateTime(2025, 12, 29, 12, 0, 0, 0, DateTimeKind.Utc), 13, "ML Kolokvij" }
                 });
 
             migrationBuilder.InsertData(
@@ -231,10 +254,16 @@ namespace Moodle.Infrastructure.Migrations
                 columns: new[] { "CourseId", "UserId", "EnrolledAt" },
                 values: new object[,]
                 {
-                    { 1, 4, new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2564) },
-                    { 3, 4, new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2569) },
-                    { 1, 5, new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2566) },
-                    { 2, 6, new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2568) }
+                    { 1, 4, new DateTime(2025, 12, 7, 12, 0, 0, 0, DateTimeKind.Utc) },
+                    { 3, 4, new DateTime(2026, 1, 1, 12, 0, 0, 0, DateTimeKind.Utc) },
+                    { 1, 5, new DateTime(2025, 12, 8, 12, 0, 0, 0, DateTimeKind.Utc) },
+                    { 2, 6, new DateTime(2025, 12, 9, 12, 0, 0, 0, DateTimeKind.Utc) },
+                    { 4, 7, new DateTime(2025, 12, 10, 12, 0, 0, 0, DateTimeKind.Utc) },
+                    { 2, 8, new DateTime(2026, 1, 1, 12, 0, 0, 0, DateTimeKind.Utc) },
+                    { 5, 9, new DateTime(2025, 12, 22, 12, 0, 0, 0, DateTimeKind.Utc) },
+                    { 6, 11, new DateTime(2025, 12, 31, 12, 0, 0, 0, DateTimeKind.Utc) },
+                    { 7, 11, new DateTime(2025, 12, 31, 12, 0, 0, 0, DateTimeKind.Utc) },
+                    { 6, 12, new DateTime(2025, 12, 30, 12, 0, 0, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.InsertData(
@@ -243,9 +272,14 @@ namespace Moodle.Infrastructure.Migrations
                 columns: new[] { "Id", "CourseId", "CreatedAt", "Name", "ProfessorId", "Url" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2610), "Uvod u C#", 2, "https://example.com/csharp" },
-                    { 2, 2, new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2612), "OOP principi", 2, "https://example.com/oop" },
-                    { 3, 3, new DateTime(2026, 1, 2, 19, 6, 14, 723, DateTimeKind.Utc).AddTicks(2614), "SQL osnove", 3, "https://example.com/sql" }
+                    { 1, 1, new DateTime(2025, 12, 7, 12, 0, 0, 0, DateTimeKind.Utc), "Uvod u C#", 2, "https://example.com/csharp" },
+                    { 2, 2, new DateTime(2025, 12, 8, 12, 0, 0, 0, DateTimeKind.Utc), "OOP principi", 2, "https://example.com/oop" },
+                    { 3, 3, new DateTime(2025, 12, 9, 12, 0, 0, 0, DateTimeKind.Utc), "SQL osnove", 3, "https://example.com/sql" },
+                    { 4, 4, new DateTime(2025, 12, 10, 12, 0, 0, 0, DateTimeKind.Utc), "HTML & CSS", 3, "https://example.com/html-css" },
+                    { 5, 2, new DateTime(2025, 12, 12, 12, 0, 0, 0, DateTimeKind.Utc), "LINQ u C#", 2, "https://example.com/linq" },
+                    { 6, 5, new DateTime(2025, 12, 22, 12, 0, 0, 0, DateTimeKind.Utc), "Napredni LINQ", 10, "https://example.com/linq-advanced" },
+                    { 7, 6, new DateTime(2025, 12, 27, 12, 0, 0, 0, DateTimeKind.Utc), "Python Basics", 13, "https://example.com/python" },
+                    { 8, 7, new DateTime(2025, 12, 29, 12, 0, 0, 0, DateTimeKind.Utc), "ML Algorithms", 13, "https://example.com/ml" }
                 });
 
             migrationBuilder.CreateIndex(

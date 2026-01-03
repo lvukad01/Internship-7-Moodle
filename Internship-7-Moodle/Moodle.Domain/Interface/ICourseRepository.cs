@@ -8,7 +8,7 @@ public interface ICourseRepository
     Task AddAsync(Course course);
     Task SaveChangesAsync();
     Task<int> CountAsync(DateTime? from = null, DateTime? to = null);
-    Task<List<User>> GetAllAsync(DateTime? from = null, DateTime? to = null);
+    Task<List<Course>> GetAllAsync(DateTime? from = null, DateTime? to = null);
     IQueryable<Course> Query(); 
 
 

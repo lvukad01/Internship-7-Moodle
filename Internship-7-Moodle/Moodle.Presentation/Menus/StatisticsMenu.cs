@@ -60,12 +60,18 @@ namespace Moodle.Presentation.Menus
             Console.Write("Odabir: ");
 
             var choice = Console.ReadLine();
-            DateTime now = DateTime.UtcNow;
+            var now = DateTime.UtcNow;
 
             return choice switch
             {
-                "1" => (now.Date, now.Date.AddDays(1).AddTicks(-1)),
-                "2" => (new DateTime(now.Year, now.Month, 1), new DateTime(now.Year, now.Month, 1).AddMonths(1).AddTicks(-1)),
+                "1" => (
+                    from: new DateTime(now.Year, now.Month, now.Day, 0, 0, 0, DateTimeKind.Utc),
+                    to: new DateTime(now.Year, now.Month, now.Day, 23, 59, 59, 999, DateTimeKind.Utc)
+                ),
+                "2" => (
+                    from: new DateTime(now.Year, now.Month, 1, 0, 0, 0, DateTimeKind.Utc),
+                    to: new DateTime(now.Year, now.Month, DateTime.DaysInMonth(now.Year, now.Month), 23, 59, 59, 999, DateTimeKind.Utc)
+                ),
                 _ => (null, null)
             };
         }
@@ -142,3 +148,4 @@ namespace Moodle.Presentation.Menus
         }
     }
 }
+

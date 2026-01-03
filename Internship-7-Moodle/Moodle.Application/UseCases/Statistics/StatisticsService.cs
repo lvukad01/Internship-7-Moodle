@@ -34,7 +34,11 @@ namespace Moodle.Application.UseCases.Statistics
             var courses = await _courseRepository.GetAllAsync(from, to);
 
             return courses
-                .Select(c => (c.Name, StudentCount: c.Enrollments.Count))
+                .Select(c => (
+                    CourseName: c.Name,
+                    StudentCount: c.Enrollments.Count(e => (!from.HasValue || e.EnrolledAt >= from.Value)
+                                                      && (!to.HasValue || e.EnrolledAt <= to.Value))
+                ))
                 .OrderByDescending(x => x.StudentCount)
                 .Take(top)
                 .ToList();

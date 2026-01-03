@@ -82,5 +82,20 @@ namespace Moodle.Infrastructure.Repositories
         {
             return _context.Courses.AsQueryable();
         }
+        public async Task<List<Course>> GetAllAsync(DateTime? from = null, DateTime? to = null)
+        {
+            var query = _context.Courses
+                .Include(c => c.Enrollments)
+                .ThenInclude(e => e.User)
+                .AsQueryable();
+
+            if (from.HasValue)
+                query = query.Where(c => c.CreatedAt >= from.Value);
+            if (to.HasValue)
+                query = query.Where(c => c.CreatedAt <= to.Value);
+
+            return await query.ToListAsync();
+        }
+
     }
 }
