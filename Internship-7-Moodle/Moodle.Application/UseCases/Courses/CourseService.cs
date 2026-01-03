@@ -86,6 +86,9 @@ namespace Moodle.Application.UseCases.Courses
             if (string.IsNullOrWhiteSpace(url))
                 throw new ValidationException(new[] { ValidationItems.Material.UrlRequired });
 
+            if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
+                throw new ValidationException(new[] { ValidationItems.Material.UrlInvalid });
+
             var course = await GetByIdAsync(courseId);
             course.Materials.Add(new Material
             {
